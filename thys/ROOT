@@ -1,0 +1,4 @@
+session llvm_lrat_checker = Isabelle_LLVM +
+  options [browser_info]
+  theories
+    LRAT_Checker_Impl
