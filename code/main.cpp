@@ -6,7 +6,7 @@
 #include <cstdio>
 
 extern "C" {
-  #include "lrat_checker_export.h"
+  #include "lrat_isa_export.h"
   // #include <sys/mman.h>
 }
 

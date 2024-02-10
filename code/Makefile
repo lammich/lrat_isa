@@ -1,4 +1,4 @@
-default: lrat_checker lrat_checker_dbg
+default: lrat_isa lrat_isa_dbg
 
 libs_dep=lib_isabelle_llvm.cpp lib_isabelle_llvm.c
 
@@ -14,18 +14,15 @@ cflags=-std=c++20 -stdlib=libstdc++ -Wall -Wno-unused-function -ggdb -O3 -flto -
 
 compile=clang++ $(cflags) $(libs)
 
-# lrat_checker_export.ext.ll: lrat_checker_export.ll
-# 	./ll_external.sh lrat_checker_export.ll
 
+lrat_isa_export.dbg.ll: lrat_isa_export.ll
+	./ll_dbg_tag.sh lrat_isa_export.ll
 
-lrat_checker_export.dbg.ll: lrat_checker_export.ll
-	./ll_dbg_tag.sh lrat_checker_export.ll
+lrat_isa_dbg: main.cpp lrat_isa_export.dbg.ll $(libs_dep) ll_dbg.cpp Makefile
+	$(compile) main.cpp lrat_isa_export.dbg.ll ll_dbg.cpp -o lrat_isa_dbg
 
-lrat_checker_dbg: main.cpp lrat_checker_export.dbg.ll $(libs_dep) ll_dbg.cpp Makefile
-	$(compile) main.cpp lrat_checker_export.dbg.ll ll_dbg.cpp -o lrat_checker_dbg
-
-lrat_checker: main.cpp lrat_checker_export.ll $(libs_dep) Makefile
-	$(compile) main.cpp lrat_checker_export.ll -o lrat_checker
+lrat_isa: main.cpp lrat_isa_export.ll $(libs_dep) Makefile
+	$(compile) main.cpp lrat_isa_export.ll -o lrat_isa
 
 clean:
-	rm -f lrat_checker_export.dbg.ll lrat_checker_dbg lrat_checker
+	rm -f lrat_isa_export.dbg.ll lrat_isa_dbg lrat_isa

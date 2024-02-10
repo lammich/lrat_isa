@@ -1468,7 +1468,7 @@ begin
   subsection \<open>Generation of LLVM and Correctness Theorem\<close>  
     
   export_llvm lrat_checker is "uint8_t lrat_checker(uint8_t *, int64_t)"  
-    file "../code/lrat_checker_export.ll"
+    file "../code/lrat_isa_export.ll"
               
 
   (* Low-level correctness theorem as Hoare-Triple *)    
