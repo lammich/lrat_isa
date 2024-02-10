@@ -1,0 +1,4 @@
+[submodule "isabelle_llvm"]
+	path = isabelle_llvm
+	url = git@github.com:lammich/isabelle_llvm.git
+	branch = 2023
