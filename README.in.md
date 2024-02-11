@@ -3,6 +3,9 @@
 lrat_isa is a checker for unsatisfiability certificates in the LRUP format, formally verified in Isabelle/HOL.
 It is implemented time and memory efficiently, and can be run in parallel to the SAT solver at low overhead.
 
+Here are some [benchmark plots](plots/README.md) or the [raw data](benchmark_data).
+
+
 The verification is done wrt. a grammar of the DIMACS CNF format, and down to the LLVM code implementing the checker.
 
 ## Prerequisites
