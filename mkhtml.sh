@@ -11,6 +11,5 @@ mkdir -p docs
 
 cp -a "$ISABELLE_BROWSER_INFO"/* "docs/"
 
-
 # pandoc -V pagetitle="LRUP Check LLVM" -s index.md > docs/index.docs
 
