@@ -78,7 +78,7 @@
 
       isabelle build -D .
 
-  This will invoke Isabelle to check all proofs and re-generate the exported code, which is written to <code>code/lrat_checker_export.ll</code> This may take a while, in particular on the first invocation, when Isabelle builds some prerequisites.
+  This will invoke Isabelle to check all proofs and re-generate the exported code, which is written to <code>code/lrat_isa_export.ll</code> This may take a while, in particular on the first invocation, when Isabelle builds some prerequisites.
 
 
 
