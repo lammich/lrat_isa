@@ -4,4 +4,4 @@ code:
 	make -C code
 
 check_thys:
-	../bin/isabelle build -D .
+	isabelle build -D .
