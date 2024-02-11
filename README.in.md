@@ -48,7 +48,7 @@
 
   * [Abstract Checker](THYS:Relaxed_Assignment.html#Relaxed_Assignment.checker_state|type) contains the abstract transition relation for the checker, and it's [correctness](THYS:Relaxed_Assignment.html#Relaxed_Assignment.checker_trans_rtrancl_unsatI|thm)
 
-  * [Unit checking (check_uot)](THYS:LRAT_Checker_Impl.html#LRAT_Checker_Impl.cdb_check_uot|const)
+  * [Unit checking (check_uot)](THYS:LRAT_Checker_Impl.html#LRAT_Checker_Impl.cdb_check_uot|const) the inner loop of our checker.
 
   * Data Structures (the theories contain the abstract versions and the LLVM implementations)
     * [Literal Encoding](THYS:Unsigned_Literal.html)
