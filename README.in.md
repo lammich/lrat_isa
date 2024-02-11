@@ -35,28 +35,28 @@
 
 
 ## Inspecting the Proof
-  You can browse the [html version](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/index.html) of the theories.
+  You can browse the [html version](THYS:index.html) of the theories.
   Note that the presentation in the paper has been simplified for better readability, and typically uses shorter names than the actual formalization.
 
   Good starting points for browsing:
 
-  * [Main Theory](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/LRAT_Checker_Impl.html) contains code generation and [final correctness theorem](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/LRAT_Checker_Impl.html#LRAT_Checker_Impl.lrat_checker_correct|fact) at end.
+  * [Main Theory](THYS:LRAT_Checker_Impl.html) contains code generation and [final correctness theorem](THYS:LRAT_Checker_Impl.html#LRAT_Checker_Impl.lrat_checker_correct|fact) at end.
 
-  * [DIMACS Grammar](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/CNF_Grammar.html) contains our [grammar](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/CNF_Grammar.html#CNF_Grammar.cnf_dimacs|const) for Dimacs CNF, a succinct characterization of it's [language](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/CNF_Grammar.html#CNF_Grammar.dimacs_reg_language|fact), and a [proof that it is unambiguous](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/CNF_Grammar.html#CNF_Grammar.unamb_dimacs|fact).
+  * [DIMACS Grammar](THYS:CNF_Grammar.html) contains our [grammar](THYS:CNF_Grammar.html#CNF_Grammar.cnf_dimacs|const) for Dimacs CNF, a succinct characterization of it's [language](THYS:CNF_Grammar.html#CNF_Grammar.dimacs_reg_language|fact), and a [proof that it is unambiguous](THYS:CNF_Grammar.html#CNF_Grammar.unamb_dimacs|fact).
 
-  * [Semantics of CNF](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/SAT_Basic.html), with our definition of [satisfiability](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/SAT_Basic.html#SAT_Basic.sat|const).
+  * [Semantics of CNF](THYS:SAT_Basic.html), with our definition of [satisfiability](THYS:SAT_Basic.html#SAT_Basic.sat|const).
 
-  * [Abstract Checker](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Relaxed_Assignment.html#Relaxed_Assignment.checker_state|type) contains the abstract transition relation for the checker, and it's [correctness](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Relaxed_Assignment.html#Relaxed_Assignment.checker_trans_rtrancl_pres_invar|thm)
+  * [Abstract Checker](THYS:Relaxed_Assignment.html#Relaxed_Assignment.checker_state|type) contains the abstract transition relation for the checker, and it's [correctness](THYS:Relaxed_Assignment.html#Relaxed_Assignment.checker_trans_rtrancl_pres_invar|thm)
 
   * Data Structures (the theories contain the abstract versions and the LLVM implementations)
-    * [Literal Encoding](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Unsigned_Literal.html)
-    * [Reversible Partial Assignment](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Trailed_Assignment.html)
-    * [Clause Database](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/ClauseDB.html)
+    * [Literal Encoding](THYS:Unsigned_Literal.html)
+    * [Reversible Partial Assignment](THYS:Trailed_Assignment.html)
+    * [Clause Database](THYS:ClauseDB.html)
 
     * Concrete checker states:
-      [outside proof (op)](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_out_proof|type)
-      [build-lemma (bl)](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_build_lemma|type)
-      [in proof (ip)](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_in_proof|type)
+      [outside proof (op)](THYS:LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_out_proof|type)
+      [build-lemma (bl)](THYS:LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_build_lemma|type)
+      [in proof (ip)](THYS:LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_in_proof|type)
 
 
 
