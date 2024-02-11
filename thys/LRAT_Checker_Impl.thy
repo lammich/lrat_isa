@@ -14,108 +14,7 @@ imports
   CNF_Parser_Impl
   LRAT_Parsers
 begin
-
     
-    
-  term array_assn
-  thm array_assn_def
-  
-  thm LLVM_DS_NArray.narray_assn_def
-  
-  thm LLVM_DS_Array.array_assn_def
-  
-  find_consts name: slice
-  
-  thm LLVM_DS_NArray.array_slice_assn_def
-  
-      
-
-  (* TODO: Move, this version has better behaviour in automation! *)
-  lemma if_bind_cond_refine': 
-    assumes "ci \<le> \<Down>Id (RETURN b)"
-    assumes "b \<Longrightarrow> ti\<le>\<Down>R t"
-    assumes "\<not>b \<Longrightarrow> ei\<le>\<Down>R e"
-    shows "do {b\<leftarrow>ci; if b then ti else ei} \<le> \<Down>R (if b then t else e)"
-    using assms
-    by (auto simp add: refine_pw_simps pw_le_iff)
-    
-  (* TODO: Move.  
-    This is an ad-hoc concept to stop the VCG, thus that we can instantiate existentials, before
-    further rules introduce new schematics too early. A vcg-mode that instantiates 
-    existentials automatically before steps might be better suited here!
-  *)  
-  definition "VCG_STOP x \<equiv> x"  
-  
-  lemma VCG_STOP: "m \<le> m' \<Longrightarrow> VCG_STOP m \<le> m'"
-    unfolding VCG_STOP_def by auto
-
-    
-
-  (* TODO: Move
-    TODO: Generalizes IICF_Indexed_Array_List.b_rel_Id_list_rel_conv
-  *)      
-  lemma b_rel_list_rel_conv: "\<langle>b_rel S P\<rangle>list_rel = b_rel (\<langle>S\<rangle>list_rel) (\<lambda>xs. \<forall>x\<in>set xs. P x)"  
-  proof -
-    have "(xs,xs')\<in>\<langle>b_rel S P\<rangle>list_rel \<longleftrightarrow> (xs,xs')\<in>b_rel (\<langle>S\<rangle>list_rel) (\<lambda>xs. \<forall>x\<in>set xs. P x)" for xs xs'
-      apply (cases "length xs = length xs'")
-      subgoal 
-        apply (induction xs xs' rule: list_induct2)
-        by auto
-      subgoal by (auto dest: list_rel_imp_same_length)
-      done
-    thus ?thesis by auto  
-  qed
-    
-  
-    
-  (* TODO: Move *)    
-  lemmas [refine del] = FOREACHcd_refine
-  lemma FOREACHcd_refine_stronger[refine]:
-    assumes [simp]: "finite s \<Longrightarrow> finite s'"
-    assumes S: "(s',s)\<in>\<langle>S\<rangle>set_rel"
-    assumes SV: "single_valued S"
-    assumes R0: "(\<sigma>',\<sigma>)\<in>R"
-    assumes C: "\<And>\<sigma>' \<sigma>. (\<sigma>',\<sigma>)\<in>R \<Longrightarrow> (c' \<sigma>', c \<sigma>)\<in>bool_rel"
-    assumes F: "\<And>x' x \<sigma>' \<sigma>. \<lbrakk>(x', x) \<in> S; (\<sigma>', \<sigma>) \<in> R; x\<in>s\<rbrakk>
-       \<Longrightarrow> f' x' \<sigma>' \<le> \<Down> R (f x \<sigma>)"
-    shows "FOREACHcd s' c' f' \<sigma>' \<le> \<Down>R (FOREACHcdi I s c f \<sigma>)"
-  proof -
-    have [refine_dref_RELATES]: "RELATES S" by (simp add: RELATES_def)
-  
-    from SV obtain \<alpha> I where [simp]: "S=br \<alpha> I" by (rule single_valued_as_brE)
-    with S have [simp]: "s=\<alpha>`s'" and [simp]: "\<forall>x\<in>s'. I x" 
-      by (auto simp: br_set_rel_alt)
-    
-    show ?thesis
-      unfolding FOREACHcd_def FOREACHcdi_def
-      
-      find_in_thms nfoldli in refine
-      
-      find_theorems nfoldli list_rel
-      
-      
-      apply (refine_rcg nfoldli_refine[where S="b_rel S (\<lambda>x. x\<in>s)"])
-      
-      apply refine_dref_type
-      subgoal by simp
-      subgoal
-        apply (auto simp: pw_le_iff refine_pw_simps)
-        using S
-        apply (rule_tac x="map \<alpha> x" in exI)
-        apply (auto simp: map_in_list_rel_conv)
-        done
-      subgoal 
-        by (simp add: b_rel_list_rel_conv)
-      subgoal using R0 by auto
-      subgoal using C by auto  
-      subgoal using F by force 
-      done
-  qed    
-    
-    
-
-
-
 
   subsection \<open>Abstract Algorithms\<close>
 
@@ -125,13 +24,6 @@ begin
       None \<Rightarrow> rpa_is_conflict_clause A C\<^sub>1
     | Some l \<Rightarrow> rpa_is_uot_lit A C\<^sub>1 l)"
   
-  (*  
-  definition "check_uot A C \<equiv> FOREACHcdi (check_uot_invar A) C (\<lambda>_. True) (\<lambda>l (ul,err). doN {
-    if is_false A l then RETURN (ul,err)
-    else if is_None ul then RETURN (Some l,err)
-    else RETURN (ul,True)
-  }) (None,False)"
-  *)
     
   lemma rpa_is_conflict_clause_empty[simp]: "rpa_is_conflict_clause A {}" 
     unfolding rpa_is_conflict_clause_def by auto 
@@ -145,43 +37,11 @@ begin
   lemma rpa_is_uot_lit_insert_nfalseI: "\<not>is_false A l \<Longrightarrow> rpa_is_conflict_clause A C \<Longrightarrow> rpa_is_uot_lit A (insert l C) l"  
     unfolding rpa_is_uot_lit_def rpa_is_conflict_clause_def by auto
       
-  (*  
-  lemma check_uot_correct[refine_vcg]: "finite C \<Longrightarrow> check_uot A C 
-    \<le> SPEC (\<lambda>(ul,err). \<not>err 
-          \<longrightarrow> (case ul of 
-                None \<Rightarrow> rpa_is_conflict_clause A C
-              | Some l \<Rightarrow> rpa_is_uot_lit A C l))"
-    unfolding check_uot_def
-    apply refine_vcg
-    apply (clarsimp_all split!: option.split)
-    unfolding check_uot_invar_def
-    by (auto split!: option.split simp: rpa_is_uot_lit_insert_nfalseI)
 
-  (* For paper: definition shown in paper *)
-  term "check_uot :: 'a rp_ass \<Rightarrow> 'a clause \<Rightarrow> ('a literal option \<times> bool) nres"
-  lemma "check_uot A C = FOREACHcdi (check_uot_invar A) C (\<lambda>_. True) 
-    (\<lambda>l (ul,err). do {
-        if A (neg_lit l) then RETURN (ul,err)
-        else if ul = None then RETURN (Some l,err)
-        else RETURN (ul,True)
-      }
-    ) (None,False)"
-    unfolding check_uot_def is_true_def is_None_def
-    apply (fo_rule cong refl)+
-    by (auto simp: fun_eq_iff)
+  text \<open>First, we implement the loop. For technical reasons (we have to access an inner array),
+    we will use a locale, and here, only specify body and condition. 
+  \<close>  
     
-  *)
-  (*
-    We now refine the check_uot algorithm to use iteration over a clause in the clause database
-    
-    For that, we refine the loop body, and then instantiate the clause-db-iterator locale
-  *)      
-  
-
-  (*
-    Step 1: rpan
-  *)  
-
   abbreviation (input) "err_code_mult_undecided \<equiv> 0x2"
   abbreviation (input) "err_code_invalid_id \<equiv> 0x3"
   
@@ -200,24 +60,8 @@ begin
   definition [simp]: "check_uot2_cond _ _ = True"
   
 
-  (*
-  definition "check_uot2 A C \<equiv> FOREACHcd C (check_uot2_cond A) (check_uot2_body A) (None,False)"
+  text \<open>Next, we use sepref to produce implementations of body and condition\<close>
     
-  lemma check_uot2_refine: 
-    assumes [simp]: "rpan_invar A"
-    assumes VB: "var_of_lit`C \<subseteq> rpan_dom A"
-    shows "check_uot2 A C \<le> \<Down>(Id \<times>\<^sub>r bool_rel) (check_uot (rpan_\<alpha> A) C)"  
-    unfolding check_uot2_def check_uot2_body_def check_uot_def
-    apply (refine_vcg if_bind_cond_refine')
-    apply (refine_dref_type)
-    apply (simp_all add: VB[THEN set_mp])
-    done
-  *)  
-    
-  (*
-    Step 2: implement body and condition
-  *)
-  
   sepref_definition check_uot2_body_impl [llvm_inline] is "uncurry2 check_uot2_body" :: "rpan_assn\<^sup>k *\<^sub>a ulit_assn\<^sup>k *\<^sub>a (ulito_assn \<times>\<^sub>a bool1_assn)\<^sup>d \<rightarrow>\<^sub>a ulito_assn \<times>\<^sub>a bool1_assn"
     unfolding check_uot2_body_def
     by sepref  
@@ -228,22 +72,16 @@ begin
     by sepref
     
 
-  (*
-    Instantiate locale
-  *)  
+  text \<open>Finally, we instantiate the locale for the loop.\<close>
   interpretation uot: clause_iteration_setup check_uot2_cond_impl check_uot2_cond check_uot2_body_impl check_uot2_body rpan_assn "(ulito_assn \<times>\<^sub>a bool1_assn)"
     apply unfold_locales
     apply (rule check_uot2_cond_impl.refine)
     apply (rule check_uot2_body_impl.refine)
     done
     
-    
-  (*
-    Prove iteration correct
-  *)
 
-  lemma "(\<forall>C\<in>ran cdb. var_of_lit`C \<subseteq> rpan_dom A) \<longleftrightarrow> var_of_lit`\<Union>(ran cdb) \<subseteq> rpan_dom A" by auto
-  
+  text \<open>We prove the generated loop correct\<close>      
+
   lemma uot_cdb_iterate_clause_correct[refine_vcg]:
     assumes [simp]: "rpan_invar A"
     assumes CIDV: "cdb cid = Some C"
@@ -261,7 +99,8 @@ begin
     using CIDV VB
     by (auto split!: option.splits simp: rpa_is_uot_lit_insert_nfalseI ran_def)
     
-  
+
+  text \<open>And combine it with looking up the clause\<close>    
   definition cdb_check_uot :: "rpan \<Rightarrow> cdb \<Rightarrow> nat \<Rightarrow> (dv_lit option \<times> bool) nres"
     where "cdb_check_uot A cdb cid \<equiv> do {
     if\<^sub>N cdb_contains cid cdb then do {
@@ -273,16 +112,7 @@ begin
   
   }"
   
-  lemma rpan_is_false_unchecked_alt: "rpan_is_false_unchecked A l = doN {
-    ASSERT (ulit_of (neg_lit l) < length (fst A));
-    RETURN (fst A ! ulit_of (neg_lit l))
-  }"
-    unfolding rpan_is_true_unchecked_def bla_get_unchecked_def
-    apply (cases A; simp)
-    done
-  
-  
-  (* For paper: explicit abstract version of check_uot *)  
+  text \<open>The following lemma shows a direct characterization of \<^const>\<open>cdb_check_uot\<close> as presented in the paper\<close>
   lemma "cdb_check_uot A cdb cid = (
     if cid \<in> dom cdb then doN {
       let C = the (cdb cid);
@@ -295,14 +125,25 @@ begin
       }) (None, False)
     } else RETURN (None, True)
     )"
-    unfolding cdb_check_uot_def uot.cdb_iterate_clause_def check_uot2_cond_def check_uot2_body_def Let_def rpan_is_false_unchecked_alt
-    apply simp
-    apply (fo_rule cong | simp | intro ext impI conjI)+
-    done
-    
+  proof -
+    have rpan_is_false_unchecked_alt: "rpan_is_false_unchecked A l = doN {
+      ASSERT (ulit_of (neg_lit l) < length (fst A));
+      RETURN (fst A ! ulit_of (neg_lit l))
+    }" for l
+      unfolding rpan_is_true_unchecked_def bla_get_unchecked_def
+      apply (cases A; simp)
+      done
+  
+    show ?thesis
+      unfolding cdb_check_uot_def uot.cdb_iterate_clause_def check_uot2_cond_def check_uot2_body_def Let_def rpan_is_false_unchecked_alt
+      apply simp
+      apply (fo_rule cong | simp | intro ext impI conjI)+
+      done
+      
+  qed    
   
   
-  
+  text \<open>Correctness theorem for \<^const>\<open>cdb_check_uot\<close>:\<close>
   lemma cdb_check_uot_correct:
     assumes "rpan_invar A"
     assumes "\<forall>C\<in>ran cdb. var_of_lit`C \<subseteq> rpan_dom A"
@@ -324,7 +165,9 @@ begin
       by (auto split: option.split)
       
   qed
-        
+     
+  text \<open>Actually, for our verification, we only need a weaker version that ignores 
+    clause identifiers:\<close>
   lemma cdb_check_uot_correct_weak[refine_vcg]:
     assumes "rpan_invar A"
     assumes "\<forall>C\<in>ran cdb. var_of_lit`C \<subseteq> rpan_dom A"
@@ -338,176 +181,33 @@ begin
     using assms
     by (auto 0 3 split: option.splits intro: ranI)
   
-  (* Implement *)  
-    
-  find_theorems ulito_assn hn_refine
-  
+  text \<open>Finally, we use Sepref to generate an imperative implementation\<close>  
   sepref_def cdb_check_uot_impl is "uncurry2 cdb_check_uot" :: "rpan_assn\<^sup>k *\<^sub>a cdb_assn\<^sup>k *\<^sub>a cid_assn\<^sup>k \<rightarrow>\<^sub>a ulito_assn \<times>\<^sub>a bool1_assn"
     unfolding cdb_check_uot_def
     by sepref
   
     
-        
-  (*  
-    
-  lemma cdb_check_uot_correct[refine_vcg]:
-    assumes [simp]: "cdb_invar cdb"
-    shows "uot.cdb_iterate_clause A cdb cid \<le> SPEC (\<lambda>(ul,err). \<not>err \<longrightarrow> 
-      (\<exists>C\<in>ran cdb. case ul of 
-          None \<Rightarrow> rpa_is_conflict_clause A C
-        | Some l \<Rightarrow> rpa_is_uot_lit A C l 
-      )
-    )"
-    unfolding cdb_check_uot_def
-    apply refine_vcg
-    apply simp_all
-    by (auto split: option.splits intro: cdb_lookup_correct) 
-  
-    
-      
-      
-  
-  
-  (* Step 1: look up the clause in cdb *)
-  
-  definition "cdb_check_uot A cdb cid \<equiv> do {
-    ASSERT(cdb_invar cdb);
-    if cdb_id_valid cdb cid then do {
-      check_uot A (cdb_lookup cdb cid)
-    } else
-      RETURN (None,True)
-  
-  }"
-      
-  lemma cdb_check_uot_correct[refine_vcg]:
-    assumes [simp]: "cdb_invar cdb"
-    shows "cdb_check_uot A cdb cid \<le> SPEC (\<lambda>(ul,err). \<not>err \<longrightarrow> 
-      (\<exists>C\<in>cdb_\<alpha> cdb. case ul of 
-          None \<Rightarrow> rpa_is_conflict_clause A C
-        | Some l \<Rightarrow> rpa_is_uot_lit A C l 
-      )
-    )"
-    unfolding cdb_check_uot_def
-    apply refine_vcg
-    apply simp_all
-    by (auto split: option.splits intro: cdb_lookup_correct) 
-
-  (* Step 2: use iterator of clause database *)  
-      
-  definition "cdb_check_uot2 A cdb cid = do {
-      _ \<leftarrow> Refine_Basic.ASSERT (cdb_invar cdb);
-      if cdb_id_valid cdb cid
-      then cdb_iterate cdb cid (\<lambda>_. True)
-            (\<lambda>l (ul, err). do {
-                isf \<leftarrow> rpan_is_false_unchecked A l;
-                if isf then Refine_Basic.RETURN (ul, err)
-                else if is_None ul then Refine_Basic.RETURN (Some l, err) 
-                else Refine_Basic.RETURN (ul, True)
-             })
-            (ulito_None, False)
-      else Refine_Basic.RETURN (ulito_None, True)
-    }"
-  
-  
-  
-  lemma cdb_check_uot2_refine: 
-    assumes [simp]: "rpan_invar A"
-    assumes VB: "var_of_lit`cdb_lits cdb \<subseteq> rpan_dom A"
-    shows "cdb_check_uot2 A cdb cid \<le> \<Down>(Id \<times>\<^sub>r bool_rel) (cdb_check_uot (rpan_\<alpha> A) cdb cid)"  
-    unfolding cdb_check_uot2_def check_uot_def cdb_check_uot_def FOREACHcdi_def  
-    apply (refine_vcg cdb_iterate_foreach_refine if_bind_cond_refine)
-    apply (simp_all add: in_br_conv ulito_rel_def)
-    unfolding cdb_invar_def using VB 
-    by auto
-    
-
-  (* Step 3: Inline cdb-iterator. 
-    Code gets more low-level, but we can better see what exactly happens in 
-    this performance critical inner loop.
-  *)  
-    
-  abbreviation (input) "err_code_mult_undecided \<equiv> 0x2"
-  abbreviation (input) "err_code_invalid_id \<equiv> 0x3"
-
-  definition cdb_check_uot3 :: "rpan \<Rightarrow> clause_db \<Rightarrow> nat \<Rightarrow> (dv_lit option \<times> bool) nres" 
-  where "cdb_check_uot3 A cdb cid \<equiv>  doN {
-    ASSERT (cdb_invar cdb);
-    if cdb_id_valid cdb cid then doN {
-      idx \<leftarrow> cdb_lookup_cid cdb cid;
-      (_, _, ul, err) \<leftarrow> WHILE\<^sub>T 
-        (\<lambda>(brk, _). \<not> brk)
-        (\<lambda>(brk, i, ul, err). do {
-          ASSERT (i<cdb_db_len cdb);
-          l\<leftarrow>cdb_get_db cdb i;
-          if is_None l then RETURN (True, i, ul, err)
-          else do {
-            isf\<leftarrow>rpan_is_false_unchecked A (the l);
-            if isf then RETURN (False, Suc i, ul, err) 
-            else if is_None ul then RETURN (False, Suc i, l, err)
-            else doN {
-              ERROR_lito err_code_mult_undecided l;
-              ERROR_lito err_code_mult_undecided ul;
-              RETURN (False, Suc i, ul, True)
-            }
-          }
-        })
-        (False, idx, ulito_None, False);
-      RETURN (ul,err)
-    } else doN {
-      ERROR_cid err_code_invalid_id cid;
-      RETURN (ulito_None, True)
-    }
-  }"  
-
-  lemma cdb_lookup_cid_eq: "cdb_lookup_cid (ml,db,cm,bnd) i = doN {ASSERT (i\<in>zdom 0 cm); RETURN (cm i)}"
-    unfolding cdb_lookup_cid_def by auto
-
-  lemma cdb_get_db_eq: "cdb_get_db (ml,db,cm,bnd) i = mop_list_get db i"
-    unfolding cdb_get_db_def by auto    
-  
-    
-  lemma indep_double_ASSERT_conv: "doN { ASSERT P; ASSERT P; m } = doN { ASSERT P; m }"
-    by (auto simp: pw_eq_iff refine_pw_simps)  
-    
-  lemma cdb_check_uot3_refine: "cdb_check_uot3 A cdb cid = cdb_check_uot2 A cdb cid"
-    unfolding cdb_check_uot3_def cdb_check_uot2_def cdb_iterate_def zseg_fold_def 
-    unfolding ulito_is_zero_def ulito_zero_def ulit_wrapo_def ulito_the_def cdb_db_len_def
-    apply (cases cdb; 
-      simp 
-        add: cdb_lookup_cid_eq cdb_get_db_eq indep_double_ASSERT_conv
-        split del: if_split 
-        cong: if_cong)
-    
-    apply (repeat_all_new \<open>fo_rule arg_cong fun_cong arg_cong2 | rule ext\<close>)
-    apply (clarsimp simp: pw_eq_iff refine_pw_simps)
-    by blast
-    
-  lemma cdb_check_uot3_correct[refine_vcg]:
-    assumes CDBI: "cdb_invar cdb"
-    assumes AI: "rpan_invar A"
-    assumes VB: "var_of_lit`cdb_lits cdb \<subseteq> rpan_dom A"
-    shows "cdb_check_uot3 A cdb cid \<le> SPEC (\<lambda>(ul,err). (\<not>err \<longrightarrow> 
-      (\<exists>C\<in>cdb_\<alpha> cdb. case ul of 
-          None \<Rightarrow> rpa_is_conflict_clause (rpan_\<alpha> A) C
-        | Some l \<Rightarrow> rpa_is_uot_lit (rpan_\<alpha> A) C l 
-      )
-    ))"
-  proof -
-    note cdb_check_uot3_refine
-    also note cdb_check_uot2_refine[OF AI VB]
-    also note cdb_check_uot_correct[OF CDBI]
-    finally show ?thesis
-      apply (rule order_trans)
-      by (auto simp: pw_le_iff refine_pw_simps in_br_conv ulito_rel_def) 
-    
-  qed    
-      
-  *)
-  
-  
-  
   subsubsection \<open>Checker States\<close>
   
+  text \<open>This is the first refinement of the abstract checker state \<^typ>\<open>'a checker_state\<close>.
+    We split the state into three different types, depending on the represented abstract state.
+    
+    Each checker state comes with an invariant, and an abstraction function 
+    to map it the corresponding abstract checker state.
+  \<close>
+  
+
+  text \<open>All checker state invariants share a common part, which we have factored out here:\<close>
+  definition "cs_common_invar cap A cbld cdb \<equiv>
+      rpan_invar A
+    \<and> cbld_invar cbld \<and> cap \<le> cbld_\<alpha>_cap cbld
+    \<and> ulit_of`(\<Union>(ran cdb)) \<subseteq> {0..cbld_\<alpha>_maxlit cbld}  
+    \<and> (\<forall>C\<in>ran cdb. var_of_lit`C \<subseteq> rpan_dom A)
+    \<and> (var_of_lit`cbld_\<alpha>_clause cbld \<subseteq> rpan_dom A)
+  "
+  
+  
+  paragraph\<open>In Proof\<close>    
   (*
     Checker state during proof phase:
       err: error flag
@@ -517,15 +217,6 @@ begin
       cdb: clause database
     
   *)  
-
-  definition "cs_common_invar cap A cbld cdb \<equiv>
-      rpan_invar A
-    \<and> cbld_invar cbld \<and> cap \<le> cbld_\<alpha>_cap cbld
-    \<and> ulit_of`(\<Union>(ran cdb)) \<subseteq> {0..cbld_\<alpha>_maxlit cbld}  
-    \<and> (\<forall>C\<in>ran cdb. var_of_lit`C \<subseteq> rpan_dom A)
-    \<and> (var_of_lit`cbld_\<alpha>_clause cbld \<subseteq> rpan_dom A)
-  "
-  
   
   type_synonym checker_state_in_proof = "bool \<times> bool \<times> rpan \<times> cbld \<times> cdb"
 
@@ -543,6 +234,7 @@ begin
     by auto  
 
     
+  paragraph\<open>Outside Proof\<close>    
     
   (*
     Checker state outside proof phase:
@@ -600,6 +292,7 @@ begin
     unfolding csop_set_error_def cs_op_\<alpha>_def by (cases csop) auto
     
     
+  paragraph\<open>Building Clause\<close>
     
   (*
     Checker state while building lemma
@@ -628,8 +321,14 @@ begin
     
     
     
+  subsubsection \<open>Transitions between Checker States\<close>
     
-    
+  text \<open>We implement the transitions between the checker states.
+    For each transition, we prove that it preserves the invariant,
+    and implements the transition relation \<^const>\<open>checker_trans\<close> on the abstract checker state.
+  \<close>
+  
+  paragraph \<open>Proof Step\<close>
   (*
     Make a proof step
       cid -- id of next unit or conflict clause
@@ -652,7 +351,7 @@ begin
   lemma proof_step_correct[refine_vcg]: "\<lbrakk>cs_ip_invar cap csip; cap>0 \<rbrakk> 
     \<Longrightarrow> proof_step cid csip \<le> SPEC (\<lambda>csip'. 
       cs_ip_invar (cap-1) csip'
-    \<and> checker_trans(cs_ip_\<alpha> csip) (cs_ip_\<alpha> csip') 
+    \<and> checker_trans (cs_ip_\<alpha> csip) (cs_ip_\<alpha> csip') 
     )"  
     unfolding proof_step_def
     apply refine_vcg
@@ -676,10 +375,8 @@ begin
       by (auto simp add: cs_ip_\<alpha>_def simp: ct_refl ct_fail ct_add_unit)
     done  
   
+  paragraph \<open>Finish proof\<close>
 
-  (*
-    Finish proof.
-  *)  
   abbreviation (input) "err_code_no_conflict \<equiv> 0x4"
   definition finish_proof :: "nat \<Rightarrow> checker_state_in_proof \<Rightarrow> checker_state_out_proof nres" where
     "finish_proof cid \<equiv> \<lambda>(err,confl,A,cbld,cdb). 
@@ -697,7 +394,7 @@ begin
         RETURN (False,e,cdb,cbld,A)
       }"
       
-      
+  (* TODO: Move *)      
   lemma in_ran_updD: "\<lbrakk>X \<in> ran (m(k \<mapsto> v))\<rbrakk> \<Longrightarrow> X\<in>ran m \<or> X=v"    
     by (auto simp: ran_def split: if_splits)
     
@@ -730,10 +427,8 @@ begin
       done
     done
     
+  paragraph \<open>Start lemma\<close>
    
-  (*
-    Start lemma
-  *)
   definition start_lemma :: "nat \<Rightarrow> checker_state_out_proof \<Rightarrow> checker_state_build_lemma nres" where
     "start_lemma cap \<equiv> \<lambda>(err,unsat,cdb,cbld,A). doN {
       A \<leftarrow> rpan_clear cap A;
@@ -753,10 +448,9 @@ begin
     unfolding cs_op_\<alpha>_def cs_bl_\<alpha>_def csop_is_unsat_def
     by (auto simp: ct_fail ct_start_lemma)
 
-  (*
-    Add literal
-  *)  
-        
+    
+    
+  paragraph \<open>Add literal\<close>
       
   definition add_literal:: "dv_lit \<Rightarrow> checker_state_build_lemma \<Rightarrow> checker_state_build_lemma nres" where
     "add_literal l \<equiv> \<lambda>(err,A,cbld,cdb). do {
@@ -770,6 +464,7 @@ begin
   lemma rpa_and_not_C_insert[simp]: "rpa_and_not_C A (insert l C) = (rpa_and_not_C A C)(neg_lit l:=True)"  
     unfolding rpa_and_not_C_def by auto
 
+  (* TODO: Move *)  
   lemma ss_range_maxI: "A \<subseteq> {l..h} \<Longrightarrow> A \<subseteq> {l..max h h'}" for A :: "nat set"
     by (auto simp: max_def)
     
@@ -787,10 +482,7 @@ begin
     unfolding cs_bl_\<alpha>_def
     by (auto intro: ct_fail ct_add_lit)
 
-
-  (*
-    Start proof
-  *)  
+  paragraph \<open>Start proof\<close>
         
   definition start_proof:: "checker_state_build_lemma \<Rightarrow> checker_state_in_proof nres" where
     "start_proof \<equiv> \<lambda>(err,A,cbld,cdb). 
@@ -826,8 +518,7 @@ begin
     unfolding cs_bl_\<alpha>_def cs_ip_\<alpha>_def
     by (auto intro: ct_fail)
 
-        
-  (* Delete Clause *)  
+  paragraph \<open>Delete Clause\<close>
     
   definition delete_clause:: "nat \<Rightarrow> checker_state_out_proof \<Rightarrow> checker_state_out_proof nres" where
     "delete_clause cid \<equiv> \<lambda>(err,unsat,cdb,cbld,A). doN {
@@ -835,6 +526,7 @@ begin
       RETURN (err,unsat,cdb,cbld,A)
     }"
   
+  (* TODO: Move *)  
   lemma ran_del_ss: "ran (m(k:=None)) \<subseteq> ran m"  
     by (auto simp: ran_def)
     
@@ -857,7 +549,14 @@ begin
 
   subsection \<open>Combining Checker with LRAT Parser\<close>  
 
-  (* Skip over uids until a 0 has been read. (no longer) used to ignore deletions. *)
+  text \<open>Using the \<^typ>\<open>brd_rs\<close> interface to read from binary encoded files, 
+    we define functions to parse them as LRAT, and make the corresponding transitions 
+    on the checker state.
+    
+    The correctness lemmas show that the checker state invariants are preserved.
+  \<close>
+  
+  (* Skip over uids until a 0 has been read. *)
   definition skip_to_zero_uids :: "brd_rs \<Rightarrow> brd_rs nres" where
     "skip_to_zero_uids prf\<^sub>0 \<equiv> do {
       (prf,_) \<leftarrow> WHILEIT (\<lambda>(prf,_). brd_rs_invar prf \<and> brd_rs_remsize prf \<le> brd_rs_remsize prf\<^sub>0)
@@ -876,7 +575,11 @@ begin
     apply (refine_vcg WHILEIT_rule[where R="measure (brd_rs_remsize o fst)"])
     by auto
 
-    
+
+  (* Delete clauses. 
+  
+    Transition in LRAT proof: d ^ids 0 \<mapsto> d ids 0^
+  *)
   definition delete_clauses :: "checker_state_out_proof \<Rightarrow> brd_rs \<Rightarrow> (checker_state_out_proof \<times> brd_rs) nres" where
     "delete_clauses cs prf\<^sub>0 \<equiv> doN {
       (cs,prf,_) \<leftarrow> monadic_WHILEIT (\<lambda>_. True)
@@ -912,7 +615,10 @@ begin
     
         
   (*
-    Parse and add literals, until terminating zero has been found
+    Parse and add literals, until terminating zero has been found.
+    
+    Transition in LRAT proof: a ^lits 0 cids 0 \<mapsto> a lits 0 ^cids 0
+    
   *)    
   abbreviation (input) "err_code_no_term_zero_lit \<equiv> 0x5"  
   definition add_literals_loop :: "checker_state_build_lemma \<Rightarrow> brd_rs \<Rightarrow> (checker_state_in_proof \<times> brd_rs) nres" where
@@ -965,7 +671,9 @@ begin
     done
     
   (*
-    Parse clause ids and perform proof steps
+    Parse clause ids and perform proof steps:
+    
+    Transition in LRAT proof: a lits 0 ^cids 0 \<mapsto> a lits 0 cids 0^
   *)    
   definition prove_units_loop :: "checker_state_in_proof \<Rightarrow> brd_rs \<Rightarrow> (checker_state_in_proof \<times> brd_rs) nres" where
     "prove_units_loop cs prf \<equiv> doN {
@@ -1070,7 +778,7 @@ begin
     unfolding cs_op_\<alpha>_def csop_is_unsat_def csop_is_error_def
     by (cases cs; auto simp: checker_invar.simps) 
     
-  lemma main_checker_loop_correct[refine_vcg]: "\<lbrakk> brd_rs_invar prf; cs_op_invar (brd_rs_remsize prf) cs; rtranclp checker_trans (CNF F\<^sub>0) (cs_op_\<alpha> cs) \<rbrakk> 
+  theorem main_checker_loop_correct[refine_vcg]: "\<lbrakk> brd_rs_invar prf; cs_op_invar (brd_rs_remsize prf) cs; rtranclp checker_trans (CNF F\<^sub>0) (cs_op_\<alpha> cs) \<rbrakk> 
     \<Longrightarrow> main_checker_loop cs prf \<le> SPEC (\<lambda>(r,prf). brd_rs_invar prf \<and> (r \<longrightarrow> \<not>sat F\<^sub>0))
   "
     unfolding main_checker_loop_def
@@ -1093,10 +801,13 @@ begin
 
   subsubsection \<open>Combining CNF Parser with Checker\<close>  
 
-  
-  (*
-    Convert builder state to checker state
-  *)  
+  text \<open>In this section, we combine the CNF parser and the main checker loop\<close>
+
+  paragraph \<open>Convert builder state to checker state\<close>
+  text \<open>
+    Our DIMACS parser uses a \<^typ>\<open>builder_state\<close> to construct the initial formula.
+    First, we have to convert it into an initial checker state.
+  \<close>
   abbreviation (input) "info_code_ncid \<equiv> 0x1"  
   abbreviation (input) "info_code_maxlit \<equiv> 0x2"  
   definition builder_finish_building :: "builder_state \<Rightarrow> checker_state_out_proof nres" where
@@ -1127,9 +838,7 @@ begin
       by auto
     done
 
-  (*
-    Read a DIMACS file and initialize checker state
-  *)  
+  paragraph \<open>Read DIMACS file to initial checker state\<close>  
   definition read_dimacs_cs :: "input \<Rightarrow> (checker_state_out_proof \<times> nat) nres"
   where "read_dimacs_cs dimacs_input \<equiv> doN {
     (bs,cap\<^sub>1,err) \<leftarrow> read_dimacs_file dimacs_input;
@@ -1157,7 +866,7 @@ begin
     subgoal by blast
     done
   
-  (* For paper *)
+  (* For paper: *)
   lemma " 
     read_dimacs_cs dimacs_input \<le> SPEC (\<lambda>(cs,cap\<^sub>1). 
       cs_op_invar cap\<^sub>1 cs 
@@ -1176,9 +885,7 @@ begin
     by sepref
       
     
-  (*
-    Read DIMACS file and run checker
-  *)    
+  paragraph \<open>Read DIMACS file and run checker\<close>  
   definition read_check_lrat :: "input \<Rightarrow> bool nres" where 
   "read_check_lrat cnf \<equiv> doN {
     (cs,cap) \<leftarrow> read_dimacs_cs cnf;
@@ -1193,6 +900,10 @@ begin
     })
   }"
     
+  text \<open>This is the correctness theorem of the functional abstraction level checker:
+  
+    If it returns true, the input was a valid representation of an unsatisfiable formula.
+  \<close>
   theorem read_check_lrat_correct[refine_vcg]: "read_check_lrat cnf \<le> SPEC (\<lambda>r. 
     r \<longrightarrow> (\<exists>F. (i_data cnf, F) \<in> gM_rel cnf_dimacs \<and> \<not>sat F))"
     unfolding read_check_lrat_def
@@ -1210,56 +921,14 @@ begin
     apply refine_vcg
     by auto
     
-  (*  
-  (* For Paper *)  
-  lemma builder_finish_building_no_err: "builder_finish_building bs \<le> SPEC (\<lambda>cs. \<not>csop_is_error cs)"
-    unfolding builder_finish_building_def csop_is_error_def
-    apply refine_vcg
-    by simp
-    
-  
-  (* Definition of read_check_lrat as presented in paper *)
-  lemma "read_check_lrat cnf prf = (
-    if i_size cnf + i_size prf \<ge> max_snat size_t_len - 1 then RETURN False
-    else do {
-      ASSERT (Suc (i_size cnf + i_size prf) \<le> max_snat size_t_len - Suc 0);
-      (bs, err) \<leftarrow> read_dimacs_file (i_size prf) cnf;
-      cs \<leftarrow> builder_finish_building bs;
-      if err then RETURN False else main_checker_loop cs prf
-    }
-  )"
-    unfolding read_check_lrat_def read_dimacs_cs_def VCG_STOP_def
-
-    apply (split if_split; intro conjI impI; simp)  
-    using builder_finish_building_no_err
-    unfolding csop_set_error_def csop_is_error_def
-      
-    apply (simp add: pw_eq_iff pw_le_iff)
-    apply (simp add:  refine_pw_simps)
-    apply safe
-    apply simp_all
-    apply metis+
-    done
-  *)  
-    
     
   subsection \<open>Refinement to LLVM\<close>  
-    
-  (* Implementation: Checker *)  
 
-  (*    
-  (* This is intermingled with clause database internals.
-    Implement cdb_lookup_idx and cdb_get_db_lit as interface operations for more smooth refinement!
-  *)
-  term cdb_check_uot3
-  
-  sepref_register cdb_check_uot3
-  
-  sepref_def cdb_check_uot_impl is "uncurry2 cdb_check_uot3" :: "rpan_assn\<^sup>k *\<^sub>a cdb_assn\<^sup>k *\<^sub>a cid_assn\<^sup>k \<rightarrow>\<^sub>a ulito_assn \<times>\<^sub>a bool1_assn"
-    unfolding cdb_check_uot3_def
-    by sepref  
-    
-  *)  
+  text \<open>We refine from the functional level to the imperative level.
+    This is done by the Sepref tool, and mostly automatic.
+  \<close>
+
+  subsubsection \<open>Concrete Checker States and Transitions\<close>      
     
   definition "cs_ip_assn = bool1_assn \<times>\<^sub>a bool1_assn \<times>\<^sub>a rpan_assn \<times>\<^sub>a cbld_assn \<times>\<^sub>a cdb_assn"  
   definition "cs_op_assn = bool1_assn \<times>\<^sub>a bool1_assn \<times>\<^sub>a cdb_assn \<times>\<^sub>a cbld_assn \<times>\<^sub>a rpan_assn"  
@@ -1312,6 +981,8 @@ begin
     unfolding delete_clause_def cs_op_assn_def
     by sepref 
 
+  subsubsection \<open>Checker with LRAT Parser, up to \<^const>\<open>main_checker_loop\<close>\<close>
+    
   sepref_register skip_to_zero_uids delete_clauses add_literals_loop prove_units_loop main_checker_loop
     
   sepref_def skip_to_zero_uids_impl is "skip_to_zero_uids" :: "brd_rs_assn\<^sup>d \<rightarrow>\<^sub>a brd_rs_assn"
@@ -1348,7 +1019,7 @@ begin
     
     
     
-  (* Implementation: Builder *)    
+  subsubsection \<open>Combination with CNF Parser\<close>    
     
   sepref_register 
     builder_finish_building 
@@ -1367,11 +1038,16 @@ begin
 
   sepref_register read_check_lrat  
 
-  sepref_def read_check_lrat_impl is "read_check_lrat" 
-    :: "rdmem_inp_assn\<^sup>k \<rightarrow>\<^sub>a bool1_assn"
+  sepref_def read_check_lrat_impl is "read_check_lrat" :: "rdmem_inp_assn\<^sup>k \<rightarrow>\<^sub>a bool1_assn"
     unfolding read_check_lrat_def VCG_STOP_def
     by sepref
 
+    
+  subsubsection \<open>Wrapping into Nicer Interface\<close>  
+  text \<open>In order to interface with C, we unfold some definitions:
+    \<^item> we pass a pointer and a size, rather than the tuple defined by \<^const>\<open>rdmem_inp_assn\<close> 
+    \<^item> we return a byte (i8) instead of a bit (i1)
+  \<close>
     
   (* TODO: Move *)
   definition "make_input_from_array_and_size (xs::8 word list) n \<equiv> doN {
@@ -1451,7 +1127,7 @@ begin
     apply (annot_unat_const char_T)
     by sepref
 
-  theorem read_check_lrat_wrapper_correct: "(uncurry lrat_checker, uncurry lrat_checker_spec)
+  theorem lrat_checker_refines_spec: "(uncurry lrat_checker, uncurry lrat_checker_spec)
     \<in>   (IICF_Array.array_slice_assn (word_assn' char_T))\<^sup>k *\<^sub>a size_assn\<^sup>k \<rightarrow>\<^sub>a unat_assn' char_T"
     using lrat_checker.refine[FCOMP read_check_lrat_wrapper_refine]  
     .  
@@ -1495,7 +1171,7 @@ begin
       unfolding lrat_checker_spec_def
       by simp
     
-    note T1[vcg_rules] = read_check_lrat_wrapper_correct[
+    note T1[vcg_rules] = lrat_checker_refines_spec[
                 THEN hfrefD, THEN hn_refineD, 
                 of "(cnf,length cnf)" "(cnf_ptr,cnf_sizei)", 
                 unfolded AUX1, simplified]

@@ -5,6 +5,13 @@ imports
   Proto_Sepref_Ghostvar
   Sizes_Setup
 begin
+  (*
+    Theory to adjust Refine_Monadic and Isabelle-LLVM to our needs.
+    
+    TODO: A lot of this material should eventually be integrated into Isabelle-LLVM and Refine_Monadic
+  *)
+
+
 
   hide_const (open) LLVM_DS_Array.array_assn
   hide_const (open) LLVM_DS_NArray.array_slice_assn  
@@ -31,6 +38,22 @@ begin
       done
     done  
    
+    
+  (* TODO: Move
+    TODO: Generalizes IICF_Indexed_Array_List.b_rel_Id_list_rel_conv
+  *)      
+  lemma b_rel_list_rel_conv: "\<langle>b_rel S P\<rangle>list_rel = b_rel (\<langle>S\<rangle>list_rel) (\<lambda>xs. \<forall>x\<in>set xs. P x)"  
+  proof -
+    have "(xs,xs')\<in>\<langle>b_rel S P\<rangle>list_rel \<longleftrightarrow> (xs,xs')\<in>b_rel (\<langle>S\<rangle>list_rel) (\<lambda>xs. \<forall>x\<in>set xs. P x)" for xs xs'
+      apply (cases "length xs = length xs'")
+      subgoal 
+        apply (induction xs xs' rule: list_induct2)
+        by auto
+      subgoal by (auto dest: list_rel_imp_same_length)
+      done
+    thus ?thesis by auto  
+  qed
+    
     
   lemma sep_set_img_all_box[sep_algebra_simps]: "finite s \<Longrightarrow> (\<Union>*x\<in>s. \<box>) = \<box>"
     apply (induction s rule: finite_induct)
@@ -68,10 +91,20 @@ begin
 
     
   
-  (* TODO: Move to Refine_Monadic_Add. Duplicates in isbalele_llvm/\<dots>/examples/Sorting_Misc! *)
+  (* TODO: Move to Refine_Monadic_Add. Duplicates in isabelle_llvm/\<dots>/examples/Sorting_Misc! *)
   (* TODO: Move *)
   abbreviation monadic_If :: "bool nres \<Rightarrow> 'a nres \<Rightarrow> 'a nres \<Rightarrow> 'a nres" ("(if\<^sub>N (_)/ then (_)/ else (_))" [0, 0, 10] 10)
     where "monadic_If b x y \<equiv> doN { t \<leftarrow> b; if t then x else y }"
+    
+  (* TODO: Move, this version has better behaviour in automation! *)
+  lemma if_bind_cond_refine': 
+    assumes "ci \<le> \<Down>Id (RETURN b)"
+    assumes "b \<Longrightarrow> ti\<le>\<Down>R t"
+    assumes "\<not>b \<Longrightarrow> ei\<le>\<Down>R e"
+    shows "do {b\<leftarrow>ci; if b then ti else ei} \<le> \<Down>R (if b then t else e)"
+    using assms
+    by (auto simp add: refine_pw_simps pw_le_iff)
+    
     
   (* TODO: Move *)
   lemma monadic_WHILEIT_rule:
@@ -119,7 +152,56 @@ begin
     
   (* Required as VCG-rule when using monadic_WHILEIT_rule *)    
   lemma split_ifI[refine_vcg]: "\<lbrakk> b\<Longrightarrow>P; \<not>b\<Longrightarrow>Q \<rbrakk> \<Longrightarrow> If b P Q" by simp 
+
   
+  
+  
+  (* TODO: Move *)    
+  lemmas [refine del] = FOREACHcd_refine
+  lemma FOREACHcd_refine_stronger[refine]:
+    assumes [simp]: "finite s \<Longrightarrow> finite s'"
+    assumes S: "(s',s)\<in>\<langle>S\<rangle>set_rel"
+    assumes SV: "single_valued S"
+    assumes R0: "(\<sigma>',\<sigma>)\<in>R"
+    assumes C: "\<And>\<sigma>' \<sigma>. (\<sigma>',\<sigma>)\<in>R \<Longrightarrow> (c' \<sigma>', c \<sigma>)\<in>bool_rel"
+    assumes F: "\<And>x' x \<sigma>' \<sigma>. \<lbrakk>(x', x) \<in> S; (\<sigma>', \<sigma>) \<in> R; x\<in>s\<rbrakk>
+       \<Longrightarrow> f' x' \<sigma>' \<le> \<Down> R (f x \<sigma>)"
+    shows "FOREACHcd s' c' f' \<sigma>' \<le> \<Down>R (FOREACHcdi I s c f \<sigma>)"
+  proof -
+    have [refine_dref_RELATES]: "RELATES S" by (simp add: RELATES_def)
+  
+    from SV obtain \<alpha> I where [simp]: "S=br \<alpha> I" by (rule single_valued_as_brE)
+    with S have [simp]: "s=\<alpha>`s'" and [simp]: "\<forall>x\<in>s'. I x" 
+      by (auto simp: br_set_rel_alt)
+    
+    show ?thesis
+      unfolding FOREACHcd_def FOREACHcdi_def
+      
+      find_in_thms nfoldli in refine
+      
+      find_theorems nfoldli list_rel
+      
+      
+      apply (refine_rcg nfoldli_refine[where S="b_rel S (\<lambda>x. x\<in>s)"])
+      
+      apply refine_dref_type
+      subgoal by simp
+      subgoal
+        apply (auto simp: pw_le_iff refine_pw_simps)
+        using S
+        apply (rule_tac x="map \<alpha> x" in exI)
+        apply (auto simp: map_in_list_rel_conv)
+        done
+      subgoal 
+        by (simp add: b_rel_list_rel_conv)
+      subgoal using R0 by auto
+      subgoal using C by auto  
+      subgoal using F by force 
+      done
+  qed    
+    
+  
+    
   
   (* TODO: Move *)
   lemma mk_vcg_rule_PQ:
@@ -130,6 +212,16 @@ begin
   
     
     
+  (* TODO: Move.  
+    This is an ad-hoc concept to stop the VCG, thus that we can instantiate existentials, before
+    further rules introduce new schematics too early. A vcg-mode that instantiates 
+    existentials automatically before steps might be better suited here!
+  *)  
+  definition "VCG_STOP x \<equiv> x"  
+  
+  lemma VCG_STOP: "m \<le> m' \<Longrightarrow> VCG_STOP m \<le> m'"
+    unfolding VCG_STOP_def by auto
+
     
     
     
