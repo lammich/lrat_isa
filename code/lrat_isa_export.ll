@@ -10,33 +10,6 @@ declare i8* @isabelle_llvm_calloc(i64, i64)
 
 attributes #0 = { strictfp }
 
-define void @Zero_Term_cbld_free({ i32, { i64, { i64, i32* } } } %x) #0 {
-
-  start:
-    %a = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
-    %b = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
-    %xc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %a, 0
-    %xd = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
-    %tmpb = insertvalue { { i64, { i64, i32* } }, i1 } %xd, i1 zeroinitializer, 1
-    %tmpc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpb, 1
-    %c_1 = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
-    %aa = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
-    %ba = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
-    %xba = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %aa, 0
-    %xj = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
-    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xj, i1 zeroinitializer, 1
-    %tmpad = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
-    %xda = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
-    %c_11 = extractvalue { { i64, { i64, i32* } }, i1 } %xda, 0
-    %c_2 = extractvalue { { i64, { i64, i32* } }, i1 } %xda, 1
-    %uu = extractvalue { i64, { i64, i32* } } %c_11, 0
-    %xaaa = extractvalue { i64, { i64, i32* } } %c_11, 1
-    %uua = extractvalue { i64, i32* } %xaaa, 0
-    %xbaa = extractvalue { i64, i32* } %xaaa, 1
-    call void @LLVM_DS_NArray_narray_free (i32* %xbaa)
-    ret void
-}
-
 define void @LLVM_DS_Array_arraycpy(i32* %dst, i32* %src, i64 %n) #0 {
 
   start:
@@ -101,32 +74,14 @@ define void @LLVM_DS_Array_arrayset(i32* %dst, i32 %c, i64 %n) #0 {
     ret void
 }
 
-define { i32, { i64, { i64, i32* } } } @Zero_Term_cbld_new_impl(i64 %x) #0 {
-
-  start:
-    %x1 = call { i64, { i64, i32* } } @Zero_Term_cbuf_empty_impl ()
-    %xaa = insertvalue { i32, { i64, { i64, i32* } } } zeroinitializer, i32 0, 0
-    %x2 = insertvalue { i32, { i64, { i64, i32* } } } %xaa, { i64, { i64, i32* } } %x1, 1
-    ret { i32, { i64, { i64, i32* } } } %x2
-}
-
-define void @Zero_Term_cdb_free_impl({ i64, i32** } %x) #0 {
-
-  start:
-    %a = extractvalue { i64, i32** } %x, 0
-    %x1 = extractvalue { i64, i32** } %x, 1
-    call void @Monadify_M_CONST_LRAT_Sepref_Base_woarray_free_impl_Sepref_HOL_Bindings_dflt_option_free_option_LLVM_Shallow_ll_ptrcmp_eq_LLVM_Shallow_null_Zero_Term_zcl_free_impl (i64 %a, i32** %x1)
-    ret void
-}
-
-define void @Zero_Term_zcl_free_impl(i32* %x) #0 {
+define void @DS_Clause_zcl_free_impl(i32* %x) #0 {
 
   start:
     call void @LLVM_DS_NArray_narray_free (i32* %x)
     ret void
 }
 
-define i32* @Zero_Term_zcl_make_impl({ i64, { i64, i32* } } %x) #0 {
+define i32* @DS_Clause_zcl_make_impl({ i64, { i64, i32* } } %x) #0 {
 
   start:
     %l = extractvalue { i64, { i64, i32* } } %x, 0
@@ -167,29 +122,6 @@ define i32* @Zero_Term_zcl_make_impl({ i64, { i64, i32* } } %x) #0 {
     %a12 = extractvalue { i64, i32* } %xea, 0
     %x3 = extractvalue { i64, i32* } %xea, 1
     ret i32* %x3
-}
-
-define { i64, i32** } @Zero_Term_cdb_empty_impl() #0 {
-
-  start:
-    %tmpa = icmp eq i64 16, 0
-    br i1 %tmpa, label %then, label %else
-
-  then:
-    br label %ctd_if
-
-  else:
-    %t = getelementptr i32*, i32** null, i64 1
-    %a = ptrtoint i32** %t to i64
-    %b = call i8* @isabelle_llvm_calloc (i64 16, i64 %a)
-    %x = bitcast i8* %b to i32**
-    br label %ctd_if
-
-  ctd_if:
-    %xa = phi i32** [ %x, %else ], [ null, %then ]
-    %xaa = insertvalue { i64, i32** } zeroinitializer, i64 16, 0
-    %x1 = insertvalue { i64, i32** } %xaa, i32** %xa, 1
-    ret { i64, i32** } %x1
 }
 
 define i1* @LLVM_DS_NArray_array_grow(i64 %newsz, i64 %oldsz, i1* %src) #0 {
@@ -238,175 +170,6 @@ define { i64, { i64, i8* } } @LRAT_Parsers_brd_new_impl() #0 {
     %tmpda = insertvalue { i64, i8* } %xca, i8* %xa, 1
     %x1 = insertvalue { i64, { i64, i8* } } %xaa, { i64, i8* } %tmpda, 1
     ret { i64, { i64, i8* } } %x1
-}
-
-define { i64, { i64, i32* } } @Zero_Term_cbuf_empty_impl() #0 {
-
-  start:
-    %tmp = icmp eq i64 8, 0
-    br i1 %tmp, label %then, label %else
-
-  then:
-    br label %ctd_if
-
-  else:
-    %t = getelementptr i32, i32* null, i64 1
-    %a = ptrtoint i32* %t to i64
-    %b = call i8* @isabelle_llvm_calloc (i64 8, i64 %a)
-    %x = bitcast i8* %b to i32*
-    br label %ctd_if
-
-  ctd_if:
-    %aa = phi i32* [ %x, %else ], [ null, %then ]
-    %xb = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 0, 0
-    %xca = insertvalue { i64, i32* } zeroinitializer, i64 8, 0
-    %tmpba = insertvalue { i64, i32* } %xca, i32* %aa, 1
-    %x1 = insertvalue { i64, { i64, i32* } } %xb, { i64, i32* } %tmpba, 1
-    ret { i64, { i64, i32* } } %x1
-}
-
-define { i64, { i64, i32* } } @Zero_Term_cbuf_flush_impl({ i64, { i64, i32* } } %x) #0 {
-
-  start:
-    %l = extractvalue { i64, { i64, i32* } } %x, 0
-    %xb = extractvalue { i64, { i64, i32* } } %x, 1
-    %c = extractvalue { i64, i32* } %xb, 0
-    %a = extractvalue { i64, i32* } %xb, 1
-    %xaa = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 0, 0
-    %xfa = insertvalue { i64, i32* } zeroinitializer, i64 %c, 0
-    %tmpba = insertvalue { i64, i32* } %xfa, i32* %a, 1
-    %x1 = insertvalue { i64, { i64, i32* } } %xaa, { i64, i32* } %tmpba, 1
-    ret { i64, { i64, i32* } } %x1
-}
-
-define { i64, i32** } @Zero_Term_cdb_delete_impl(i64 %x, { i64, i32** } %x1) #0 {
-
-  start:
-    %a1 = extractvalue { i64, i32** } %x1, 0
-    %a2 = extractvalue { i64, i32** } %x1, 1
-    %xb = icmp slt i64 %x, %a1
-    br i1 %xb, label %then, label %else
-
-  then:
-    %xaa = getelementptr i32*, i32** %a2, i64 %x
-    %r = load i32*, i32** %xaa
-    %p = getelementptr i32*, i32** %a2, i64 %x
-    store i32* zeroinitializer, i32** %p
-    %xca = insertvalue { i32*, i32** } zeroinitializer, i32* %r, 0
-    %xda = insertvalue { i32*, i32** } %xca, i32** %a2, 1
-    %c_1 = extractvalue { i32*, i32** } %xda, 0
-    %c_2 = extractvalue { i32*, i32** } %xda, 1
-    %a = ptrtoint i32* null to i64
-    %b = ptrtoint i32* %c_1 to i64
-    %d = icmp eq i64 %a, %b
-    br i1 %d, label %thena, label %elsea
-
-  thena:
-    br label %ctd_ifa
-
-  elsea:
-    call void @Zero_Term_zcl_free_impl (i32* %c_1)
-    br label %ctd_ifa
-
-  ctd_ifa:
-    %a1a = extractvalue { i32*, i32** } %xda, 0
-    %ba = extractvalue { i32*, i32** } %xda, 1
-    %xea = insertvalue { i64, i32** } zeroinitializer, i64 %a1, 0
-    %x2 = insertvalue { i64, i32** } %xea, i32** %ba, 1
-    br label %ctd_if
-
-  else:
-    %xaa1 = insertvalue { i64, i32** } zeroinitializer, i64 %a1, 0
-    %x3 = insertvalue { i64, i32** } %xaa1, i32** %a2, 1
-    br label %ctd_if
-
-  ctd_if:
-    %x4 = phi { i64, i32** } [ %x3, %else ], [ %x2, %ctd_ifa ]
-    ret { i64, i32** } %x4
-}
-
-define { i64, i32** } @Zero_Term_cdb_insert_impl(i64 %x, i32* %x1, { i64, i32** } %x2) #0 {
-
-  start:
-    %a1 = extractvalue { i64, i32** } %x2, 0
-    %a2 = extractvalue { i64, i32** } %x2, 1
-    %xb = icmp slt i64 %x, %a1
-    br i1 %xb, label %then, label %else
-
-  then:
-    %xaa = insertvalue { i64, i32** } zeroinitializer, i64 %a1, 0
-    %x3 = insertvalue { i64, i32** } %xaa, i32** %a2, 1
-    br label %ctd_if
-
-  else:
-    %r = sub i64 0, 1
-    %xaa1 = lshr i64 %r, 1
-    %xba = udiv i64 %xaa1, 2
-    %xca = icmp sle i64 %xba, %a1
-    br i1 %xca, label %thena, label %elsea
-
-  thena:
-    %xda = add i64 %x, 1
-    %xea = call i32** @LRAT_Sepref_Base_wo_grow_impl (i64 %a1, i32** %a2, i64 %xda)
-    %xfa = insertvalue { i64, i32** } zeroinitializer, i64 %xda, 0
-    %x4 = insertvalue { i64, i32** } %xfa, i32** %xea, 1
-    br label %ctd_ifa
-
-  elsea:
-    %xda1 = mul i64 2, %a1
-    %xea1 = add i64 %x, 1
-    %xfa1 = icmp sle i64 %xda1, %xea1
-    br i1 %xfa1, label %thenb, label %elseb
-
-  thenb:
-    %x5 = add i64 %x, 1
-    br label %ctd_ifb
-
-  elseb:
-    %x6 = mul i64 2, %a1
-    br label %ctd_ifb
-
-  ctd_ifb:
-    %xg = phi i64 [ %x6, %elseb ], [ %x5, %thenb ]
-    %xh = call i32** @LRAT_Sepref_Base_wo_grow_impl (i64 %a1, i32** %a2, i64 %xg)
-    %xia = insertvalue { i64, i32** } zeroinitializer, i64 %xg, 0
-    %x7 = insertvalue { i64, i32** } %xia, i32** %xh, 1
-    br label %ctd_ifa
-
-  ctd_ifa:
-    %x8 = phi { i64, i32** } [ %x7, %ctd_ifb ], [ %x4, %thena ]
-    br label %ctd_if
-
-  ctd_if:
-    %xaa2 = phi { i64, i32** } [ %x8, %ctd_ifa ], [ %x3, %then ]
-    %a1a = extractvalue { i64, i32** } %xaa2, 0
-    %a2a = extractvalue { i64, i32** } %xaa2, 1
-    %xba1 = getelementptr i32*, i32** %a2a, i64 %x
-    %r1 = load i32*, i32** %xba1
-    %p = getelementptr i32*, i32** %a2a, i64 %x
-    store i32* %x1, i32** %p
-    %xda2 = insertvalue { i32*, i32** } zeroinitializer, i32* %r1, 0
-    %xea2 = insertvalue { i32*, i32** } %xda2, i32** %a2a, 1
-    %c_1 = extractvalue { i32*, i32** } %xea2, 0
-    %c_2 = extractvalue { i32*, i32** } %xea2, 1
-    %a = ptrtoint i32* null to i64
-    %b = ptrtoint i32* %c_1 to i64
-    %d = icmp eq i64 %a, %b
-    br i1 %d, label %thenc, label %elsec
-
-  thenc:
-    br label %ctd_ifc
-
-  elsec:
-    call void @Zero_Term_zcl_free_impl (i32* %c_1)
-    br label %ctd_ifc
-
-  ctd_ifc:
-    %a1b = extractvalue { i32*, i32** } %xea2, 0
-    %ba = extractvalue { i32*, i32** } %xea2, 1
-    %xfa2 = insertvalue { i64, i32** } zeroinitializer, i64 %a1a, 0
-    %x9 = insertvalue { i64, i32** } %xfa2, i32** %ba, 1
-    ret { i64, i32** } %x9
 }
 
 define void @LLVM_DS_NArray_narray_free(i32* %p) #0 {
@@ -489,52 +252,6 @@ define void @LLVM_DS_NArray_narray_free3(i32** %p) #0 {
     ret void
 }
 
-define { i64, { i64, i32* } } @Zero_Term_cbuf_insert_impl(i32 %x, { i64, { i64, i32* } } %x1) #0 {
-
-  start:
-    %l = extractvalue { i64, { i64, i32* } } %x1, 0
-    %xb = extractvalue { i64, { i64, i32* } } %x1, 1
-    %c = extractvalue { i64, i32* } %xb, 0
-    %a = extractvalue { i64, i32* } %xb, 1
-    %lb = add i64 %l, 1
-    %lc = extractvalue { i64, { i64, i32* } } %x1, 0
-    %xaa = extractvalue { i64, { i64, i32* } } %x1, 1
-    %ca = extractvalue { i64, i32* } %xaa, 0
-    %aa = extractvalue { i64, i32* } %xaa, 1
-    %cok = icmp sle i64 %lb, %ca
-    br i1 %cok, label %then, label %else
-
-  then:
-    %xba = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 %lc, 0
-    %xka = insertvalue { i64, i32* } zeroinitializer, i64 %ca, 0
-    %tmpaa = insertvalue { i64, i32* } %xka, i32* %aa, 1
-    %x2 = insertvalue { i64, { i64, i32* } } %xba, { i64, i32* } %tmpaa, 1
-    br label %ctd_if
-
-  else:
-    %xja = insertvalue { i64, i32* } zeroinitializer, i64 %ca, 0
-    %tmpa = insertvalue { i64, i32* } %xja, i32* %aa, 1
-    %xka1 = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 %lc, 0
-    %x3 = insertvalue { i64, { i64, i32* } } %xka1, { i64, i32* } %tmpa, 1
-    %x4 = call { i64, { i64, i32* } } @LLVM_DS_Array_List_arl_resize (i64 %lb, { i64, { i64, i32* } } %x3)
-    br label %ctd_if
-
-  ctd_if:
-    %al = phi { i64, { i64, i32* } } [ %x4, %else ], [ %x2, %then ]
-    %ld = extractvalue { i64, { i64, i32* } } %al, 0
-    %xba1 = extractvalue { i64, { i64, i32* } } %al, 1
-    %cb = extractvalue { i64, i32* } %xba1, 0
-    %ab = extractvalue { i64, i32* } %xba1, 1
-    %p = getelementptr i32, i32* %ab, i64 %ld
-    store i32 %x, i32* %p
-    %le = add i64 %ld, 1
-    %xca = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 %le, 0
-    %xpa = insertvalue { i64, i32* } zeroinitializer, i64 %cb, 0
-    %tmpaa1 = insertvalue { i64, i32* } %xpa, i32* %ab, 1
-    %x5 = insertvalue { i64, { i64, i32* } } %xca, { i64, i32* } %tmpaa1, 1
-    ret { i64, { i64, i32* } } %x5
-}
-
 define { { i8, i1 }, i64 } @CNF_Parser_Impl_p_char_impl(i8 %x, { i8*, i64 } %x1, i64 %x2) #0 {
 
   start:
@@ -585,7 +302,34 @@ define { { i8, i1 }, i64 } @CNF_Parser_Impl_p_char_impl(i8 %x, { i8*, i64 } %x1,
     ret { { i8, i1 }, i64 } %x7
 }
 
-define void @LRAT_Checker_Impl_nadf_free({ i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } %x) #0 {
+define void @DS_Clause_Builder_cbld_free({ i32, { i64, { i64, i32* } } } %x) #0 {
+
+  start:
+    %a = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
+    %b = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
+    %xc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %a, 0
+    %xd = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
+    %tmpb = insertvalue { { i64, { i64, i32* } }, i1 } %xd, i1 zeroinitializer, 1
+    %tmpc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpb, 1
+    %c_1 = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
+    %aa = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
+    %ba = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
+    %xba = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %aa, 0
+    %xj = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
+    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xj, i1 zeroinitializer, 1
+    %tmpad = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
+    %xda = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
+    %c_11 = extractvalue { { i64, { i64, i32* } }, i1 } %xda, 0
+    %c_2 = extractvalue { { i64, { i64, i32* } }, i1 } %xda, 1
+    %uu = extractvalue { i64, { i64, i32* } } %c_11, 0
+    %xaaa = extractvalue { i64, { i64, i32* } } %c_11, 1
+    %uua = extractvalue { i64, i32* } %xaaa, 0
+    %xbaa = extractvalue { i64, i32* } %xaaa, 1
+    call void @LLVM_DS_NArray_narray_free (i32* %xbaa)
+    ret void
+}
+
+define void @LRAT_Checker_Impl_cs_op_free({ i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } %x) #0 {
 
   start:
     %c_1 = extractvalue { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } %x, 0
@@ -594,73 +338,12 @@ define void @LRAT_Checker_Impl_nadf_free({ i1, { i1, { { i64, i32** }, { { i32, 
     %c_21 = extractvalue { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } %c_2, 1
     %c_12 = extractvalue { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } %c_21, 0
     %c_22 = extractvalue { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } %c_21, 1
-    call void @Zero_Term_cdb_free_impl ({ i64, i32** } %c_12)
+    call void @DS_Clause_Database_cdb_free_impl ({ i64, i32** } %c_12)
     %c_13 = extractvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %c_22, 0
     %c_23 = extractvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %c_22, 1
-    call void @Zero_Term_cbld_free ({ i32, { i64, { i64, i32* } } } %c_13)
-    call void @Trailed_Assignment_rpan_free ({ { i64, i1* }, { i64, { i64, i32* } } } %c_23)
+    call void @DS_Clause_Builder_cbld_free ({ i32, { i64, { i64, i32* } } } %c_13)
+    call void @DS_Reversible_Assignment_rpan_free ({ { i64, i1* }, { i64, { i64, i32* } } } %c_23)
     ret void
-}
-
-define { i32, { i64, { i64, i32* } } } @Zero_Term_cbld_add_lit_impl(i32 %x, { i32, { i64, { i64, i32* } } } %x1) #0 {
-
-  start:
-    %a = extractvalue { i32, { i64, { i64, i32* } } } %x1, 0
-    %b = extractvalue { i32, { i64, { i64, i32* } } } %x1, 1
-    %xc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %a, 0
-    %xda = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
-    %tmpba = insertvalue { { i64, { i64, i32* } }, i1 } %xda, i1 zeroinitializer, 1
-    %tmpc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpba, 1
-    %a1 = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
-    %aa = extractvalue { i32, { i64, { i64, i32* } } } %x1, 0
-    %ba = extractvalue { i32, { i64, { i64, i32* } } } %x1, 1
-    %xba = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %aa, 0
-    %xia = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
-    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xia, i1 zeroinitializer, 1
-    %tmpad = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
-    %xdaa = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
-    %a1a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 0
-    %a2a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 1
-    %xbaa = icmp ule i32 %x, %a1
-    br i1 %xbaa, label %then, label %else
-
-  then:
-    br label %ctd_if
-
-  else:
-    br label %ctd_if
-
-  ctd_if:
-    %xcaa = phi i32 [ %x, %else ], [ %a1, %then ]
-    %xdaaa = call { i64, { i64, i32* } } @Zero_Term_cbuf_insert_impl (i32 %x, { i64, { i64, i32* } } %a1a)
-    %xeaaa = insertvalue { i32, { i64, { i64, i32* } } } zeroinitializer, i32 %xcaa, 0
-    %x2 = insertvalue { i32, { i64, { i64, i32* } } } %xeaaa, { i64, { i64, i32* } } %xdaaa, 1
-    ret { i32, { i64, { i64, i32* } } } %x2
-}
-
-define i1 @Zero_Term_cdb_contains_impl(i64 %x, { i64, i32** } %x1) #0 {
-
-  start:
-    %a1 = extractvalue { i64, i32** } %x1, 0
-    %a2 = extractvalue { i64, i32** } %x1, 1
-    %x2 = icmp slt i64 %x, %a1
-    br i1 %x2, label %then, label %else
-
-  then:
-    %xa = getelementptr i32*, i32** %a2, i64 %x
-    %xb = load i32*, i32** %xa
-    %a = ptrtoint i32* null to i64
-    %b = ptrtoint i32* %xb to i64
-    %xc = icmp eq i64 %a, %b
-    %x3 = add i1 %xc, 1
-    br label %ctd_if
-
-  else:
-    br label %ctd_if
-
-  ctd_if:
-    %x4 = phi i1 [ 0, %else ], [ %x3, %then ]
-    ret i1 %x4
 }
 
 define { i8, { i64, { i64, i8* } } } @LRAT_Parsers_brd_refill_impl(i64 %x, i64 %x1, i8* %x2) #0 {
@@ -720,65 +403,6 @@ define { i64, { i64, { i64, i8* } } } @LRAT_Parsers_brd_rs_new_impl(i64 %x) #0 {
     %xaa = insertvalue { i64, { i64, { i64, i8* } } } zeroinitializer, i64 %x, 0
     %x2 = insertvalue { i64, { i64, { i64, i8* } } } %xaa, { i64, { i64, i8* } } %x1, 1
     ret { i64, { i64, { i64, i8* } } } %x2
-}
-
-define void @Trailed_Assignment_rpan_free({ { i64, i1* }, { i64, { i64, i32* } } } %x) #0 {
-
-  start:
-    %a = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x, 0
-    %b = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x, 1
-    %xc = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } zeroinitializer, { i64, i1* } %a, 0
-    %xd = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
-    %tmpb = insertvalue { { i64, { i64, i32* } }, i1 } %xd, i1 zeroinitializer, 1
-    %tmpc = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpb, 1
-    %c_1 = extractvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
-    %aa = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x, 0
-    %ba = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x, 1
-    %xba = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } zeroinitializer, { i64, i1* } %aa, 0
-    %xj = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
-    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xj, i1 zeroinitializer, 1
-    %tmpad = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
-    %c_2 = extractvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
-    %a1 = extractvalue { i64, i1* } %c_1, 0
-    %xfa = extractvalue { i64, i1* } %c_1, 1
-    call void @LLVM_DS_NArray_narray_free2 (i1* %xfa)
-    %c_11 = extractvalue { { i64, { i64, i32* } }, i1 } %c_2, 0
-    %c_21 = extractvalue { { i64, { i64, i32* } }, i1 } %c_2, 1
-    %uua = extractvalue { i64, { i64, i32* } } %c_11, 0
-    %xaaa = extractvalue { i64, { i64, i32* } } %c_11, 1
-    %uub = extractvalue { i64, i32* } %xaaa, 0
-    %xbaa = extractvalue { i64, i32* } %xaaa, 1
-    call void @LLVM_DS_NArray_narray_free (i32* %xbaa)
-    ret void
-}
-
-define i1 @Zero_Term_cbld_is_empty_impl({ i32, { i64, { i64, i32* } } } %x) #0 {
-
-  start:
-    %a = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
-    %b = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
-    %xc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %a, 0
-    %xd = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
-    %tmpb = insertvalue { { i64, { i64, i32* } }, i1 } %xd, i1 zeroinitializer, 1
-    %tmpc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpb, 1
-    %a1 = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
-    %aa = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
-    %ba = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
-    %xba = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %aa, 0
-    %xj = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
-    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xj, i1 zeroinitializer, 1
-    %tmpad = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
-    %xda = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
-    %a1a = extractvalue { { i64, { i64, i32* } }, i1 } %xda, 0
-    %a2a = extractvalue { { i64, { i64, i32* } }, i1 } %xda, 1
-    %l = extractvalue { i64, { i64, i32* } } %a1a, 0
-    %xaaa = extractvalue { i64, { i64, i32* } } %a1a, 1
-    %c = extractvalue { i64, i32* } %xaaa, 0
-    %ab = extractvalue { i64, i32* } %xaaa, 1
-    %xcaa = icmp eq i64 %l, 0
-    %xdaa = insertvalue { i32, { i64, { i64, i32* } } } zeroinitializer, i32 %a1, 0
-    %xeaa = insertvalue { i32, { i64, { i64, i32* } } } %xdaa, { i64, { i64, i32* } } %a1a, 1
-    ret i1 %xcaa
 }
 
 define { i64, { i64, i32* } } @LLVM_DS_Array_List_arl_resize(i64 %c, { i64, { i64, i32* } } %al) #0 {
@@ -939,66 +563,143 @@ define i8 @lrat_checker(i8* %x, i64 %x1) #0 {
     ret i8 %x5
 }
 
-define i32 @Zero_Term_cbld_get_maxlit_impl({ i32, { i64, { i64, i32* } } } %x) #0 {
+define { i32, { i64, { i64, i32* } } } @DS_Clause_Builder_cbld_new_impl(i64 %x) #0 {
 
   start:
-    %a = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
-    %b = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
-    %xc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %a, 0
-    %xd = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
-    %tmpb = insertvalue { { i64, { i64, i32* } }, i1 } %xd, i1 zeroinitializer, 1
-    %tmpc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpb, 1
-    %a1 = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
-    %aa = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
-    %ba = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
-    %xba = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %aa, 0
-    %xj = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
-    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xj, i1 zeroinitializer, 1
-    %tmpad = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
-    %xda = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
-    %a1a = extractvalue { { i64, { i64, i32* } }, i1 } %xda, 0
-    %a2a = extractvalue { { i64, { i64, i32* } }, i1 } %xda, 1
-    %xaaa = insertvalue { i32, { i64, { i64, i32* } } } zeroinitializer, i32 %a1, 0
-    %xbaa = insertvalue { i32, { i64, { i64, i32* } } } %xaaa, { i64, { i64, i32* } } %a1a, 1
-    ret i32 %a1
+    %x1 = call { i64, { i64, i32* } } @DS_Clause_Buffer_cbuf_empty_impl ()
+    %xaa = insertvalue { i32, { i64, { i64, i32* } } } zeroinitializer, i32 0, 0
+    %x2 = insertvalue { i32, { i64, { i64, i32* } } } %xaa, { i64, { i64, i32* } } %x1, 1
+    ret { i32, { i64, { i64, i32* } } } %x2
 }
 
-define { i32, { i64, { i64, i32* } } } @Zero_Term_cbld_abort_clause_impl({ i32, { i64, { i64, i32* } } } %x) #0 {
+define { i64, { i64, i32* } } @DS_Clause_Buffer_cbuf_empty_impl() #0 {
 
   start:
-    %a = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
-    %b = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
-    %xc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %a, 0
-    %xda = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
-    %tmpba = insertvalue { { i64, { i64, i32* } }, i1 } %xda, i1 zeroinitializer, 1
-    %tmpc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpba, 1
-    %a1 = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
-    %aa = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
-    %ba = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
-    %xba = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %aa, 0
-    %xja = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
-    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xja, i1 zeroinitializer, 1
-    %tmpad = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
-    %xdaa = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
-    %a1a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 0
-    %a2a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 1
-    %xaaa = call { i64, { i64, i32* } } @Zero_Term_cbuf_flush_impl ({ i64, { i64, i32* } } %a1a)
-    %xbaa = insertvalue { i32, { i64, { i64, i32* } } } zeroinitializer, i32 %a1, 0
-    %x1 = insertvalue { i32, { i64, { i64, i32* } } } %xbaa, { i64, { i64, i32* } } %xaaa, 1
-    ret { i32, { i64, { i64, i32* } } } %x1
+    %tmp = icmp eq i64 8, 0
+    br i1 %tmp, label %then, label %else
+
+  then:
+    br label %ctd_if
+
+  else:
+    %t = getelementptr i32, i32* null, i64 1
+    %a = ptrtoint i32* %t to i64
+    %b = call i8* @isabelle_llvm_calloc (i64 8, i64 %a)
+    %x = bitcast i8* %b to i32*
+    br label %ctd_if
+
+  ctd_if:
+    %aa = phi i32* [ %x, %else ], [ null, %then ]
+    %xb = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 0, 0
+    %xca = insertvalue { i64, i32* } zeroinitializer, i64 8, 0
+    %tmpba = insertvalue { i64, i32* } %xca, i32* %aa, 1
+    %x1 = insertvalue { i64, { i64, i32* } } %xb, { i64, i32* } %tmpba, 1
+    ret { i64, { i64, i32* } } %x1
+}
+
+define { i64, { i64, i32* } } @DS_Clause_Buffer_cbuf_flush_impl({ i64, { i64, i32* } } %x) #0 {
+
+  start:
+    %l = extractvalue { i64, { i64, i32* } } %x, 0
+    %xb = extractvalue { i64, { i64, i32* } } %x, 1
+    %c = extractvalue { i64, i32* } %xb, 0
+    %a = extractvalue { i64, i32* } %xb, 1
+    %xaa = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 0, 0
+    %xfa = insertvalue { i64, i32* } zeroinitializer, i64 %c, 0
+    %tmpba = insertvalue { i64, i32* } %xfa, i32* %a, 1
+    %x1 = insertvalue { i64, { i64, i32* } } %xaa, { i64, i32* } %tmpba, 1
+    ret { i64, { i64, i32* } } %x1
+}
+
+define void @DS_Clause_Database_cdb_free_impl({ i64, i32** } %x) #0 {
+
+  start:
+    %a = extractvalue { i64, i32** } %x, 0
+    %x1 = extractvalue { i64, i32** } %x, 1
+    call void @Monadify_M_CONST_LRAT_Sepref_Base_woarray_free_impl_Sepref_HOL_Bindings_dflt_option_free_option_LLVM_Shallow_ll_ptrcmp_eq_LLVM_Shallow_null_DS_Clause_zcl_free_impl (i64 %a, i32** %x1)
+    ret void
 }
 
 define { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } @CNF_Parser_Impl_builder_init_impl(i64 %x, i64 %x1) #0 {
 
   start:
     %x2 = add i64 %x, %x1
-    %xa = call { i32, { i64, { i64, i32* } } } @Zero_Term_cbld_new_impl (i64 %x2)
-    %xb = call { i64, i32** } @Zero_Term_cdb_empty_impl ()
+    %xa = call { i32, { i64, { i64, i32* } } } @DS_Clause_Builder_cbld_new_impl (i64 %x2)
+    %xb = call { i64, i32** } @DS_Clause_Database_cdb_empty_impl ()
     %xca = insertvalue { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } zeroinitializer, i64 1, 0
     %xda = insertvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } zeroinitializer, { i32, { i64, { i64, i32* } } } %xa, 0
     %tmpba = insertvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xda, { i64, i32** } %xb, 1
     %x3 = insertvalue { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %xca, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %tmpba, 1
     ret { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %x3
+}
+
+define { i64, { i64, i32* } } @DS_Clause_Buffer_cbuf_insert_impl(i32 %x, { i64, { i64, i32* } } %x1) #0 {
+
+  start:
+    %l = extractvalue { i64, { i64, i32* } } %x1, 0
+    %xb = extractvalue { i64, { i64, i32* } } %x1, 1
+    %c = extractvalue { i64, i32* } %xb, 0
+    %a = extractvalue { i64, i32* } %xb, 1
+    %lb = add i64 %l, 1
+    %lc = extractvalue { i64, { i64, i32* } } %x1, 0
+    %xaa = extractvalue { i64, { i64, i32* } } %x1, 1
+    %ca = extractvalue { i64, i32* } %xaa, 0
+    %aa = extractvalue { i64, i32* } %xaa, 1
+    %cok = icmp sle i64 %lb, %ca
+    br i1 %cok, label %then, label %else
+
+  then:
+    %xba = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 %lc, 0
+    %xka = insertvalue { i64, i32* } zeroinitializer, i64 %ca, 0
+    %tmpaa = insertvalue { i64, i32* } %xka, i32* %aa, 1
+    %x2 = insertvalue { i64, { i64, i32* } } %xba, { i64, i32* } %tmpaa, 1
+    br label %ctd_if
+
+  else:
+    %xja = insertvalue { i64, i32* } zeroinitializer, i64 %ca, 0
+    %tmpa = insertvalue { i64, i32* } %xja, i32* %aa, 1
+    %xka1 = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 %lc, 0
+    %x3 = insertvalue { i64, { i64, i32* } } %xka1, { i64, i32* } %tmpa, 1
+    %x4 = call { i64, { i64, i32* } } @LLVM_DS_Array_List_arl_resize (i64 %lb, { i64, { i64, i32* } } %x3)
+    br label %ctd_if
+
+  ctd_if:
+    %al = phi { i64, { i64, i32* } } [ %x4, %else ], [ %x2, %then ]
+    %ld = extractvalue { i64, { i64, i32* } } %al, 0
+    %xba1 = extractvalue { i64, { i64, i32* } } %al, 1
+    %cb = extractvalue { i64, i32* } %xba1, 0
+    %ab = extractvalue { i64, i32* } %xba1, 1
+    %p = getelementptr i32, i32* %ab, i64 %ld
+    store i32 %x, i32* %p
+    %le = add i64 %ld, 1
+    %xca = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 %le, 0
+    %xpa = insertvalue { i64, i32* } zeroinitializer, i64 %cb, 0
+    %tmpaa1 = insertvalue { i64, i32* } %xpa, i32* %ab, 1
+    %x5 = insertvalue { i64, { i64, i32* } } %xca, { i64, i32* } %tmpaa1, 1
+    ret { i64, { i64, i32* } } %x5
+}
+
+define { i64, i32** } @DS_Clause_Database_cdb_empty_impl() #0 {
+
+  start:
+    %tmpa = icmp eq i64 16, 0
+    br i1 %tmpa, label %then, label %else
+
+  then:
+    br label %ctd_if
+
+  else:
+    %t = getelementptr i32*, i32** null, i64 1
+    %a = ptrtoint i32** %t to i64
+    %b = call i8* @isabelle_llvm_calloc (i64 16, i64 %a)
+    %x = bitcast i8* %b to i32**
+    br label %ctd_if
+
+  ctd_if:
+    %xa = phi i32** [ %x, %else ], [ null, %then ]
+    %xaa = insertvalue { i64, i32** } zeroinitializer, i64 16, 0
+    %x1 = insertvalue { i64, i32** } %xaa, i32** %xa, 1
+    ret { i64, i32** } %x1
 }
 
 define { i1, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } } @LRAT_Checker_Impl_proof_step_impl(i64 %x, { i1, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } } %x1) #0 {
@@ -1152,34 +853,6 @@ define i8* @LRAT_Checker_Impl_rdmem_data_impl({ i8*, i64 } %x) #0 {
     %a1 = extractvalue { i8*, i64 } %x, 0
     %a2 = extractvalue { i8*, i64 } %x, 1
     ret i8* %a1
-}
-
-define { i32*, { i32, { i64, { i64, i32* } } } } @Zero_Term_cbld_finish_clause_impl({ i32, { i64, { i64, i32* } } } %x) #0 {
-
-  start:
-    %a = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
-    %b = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
-    %xc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %a, 0
-    %xda = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
-    %tmpba = insertvalue { { i64, { i64, i32* } }, i1 } %xda, i1 zeroinitializer, 1
-    %tmpc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpba, 1
-    %a1 = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
-    %aa = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
-    %ba = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
-    %xba = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %aa, 0
-    %xja = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
-    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xja, i1 zeroinitializer, 1
-    %tmpad = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
-    %xdaa = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
-    %a1a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 0
-    %a2a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 1
-    %xaaa = call i32* @Zero_Term_zcl_make_impl ({ i64, { i64, i32* } } %a1a)
-    %xbaa = call { i64, { i64, i32* } } @Zero_Term_cbuf_flush_impl ({ i64, { i64, i32* } } %a1a)
-    %xcaa = insertvalue { i32, { i64, { i64, i32* } } } zeroinitializer, i32 %a1, 0
-    %xdaaa = insertvalue { i32, { i64, { i64, i32* } } } %xcaa, { i64, { i64, i32* } } %xbaa, 1
-    %xeaaa = insertvalue { i32*, { i32, { i64, { i64, i32* } } } } zeroinitializer, i32* %xaaa, 0
-    %x1 = insertvalue { i32*, { i32, { i64, { i64, i32* } } } } %xeaaa, { i32, { i64, { i64, i32* } } } %xdaaa, 1
-    ret { i32*, { i32, { i64, { i64, i32* } } } } %x1
 }
 
 define { { { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } }, i1 }, i64 } @CNF_Parser_Impl_parse_clause2_impl({ i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %x, { i8*, i64 } %x1, i64 %x2) #0 {
@@ -1689,6 +1362,166 @@ define { i1, i64 } @CNF_Parser_Impl_parse_skip_to_impl(i8 %x, { i8*, i64 } %x1, 
     ret { i1, i64 } %x9
 }
 
+define { i64, i32** } @DS_Clause_Database_cdb_delete_impl(i64 %x, { i64, i32** } %x1) #0 {
+
+  start:
+    %a1 = extractvalue { i64, i32** } %x1, 0
+    %a2 = extractvalue { i64, i32** } %x1, 1
+    %xb = icmp slt i64 %x, %a1
+    br i1 %xb, label %then, label %else
+
+  then:
+    %xaa = getelementptr i32*, i32** %a2, i64 %x
+    %r = load i32*, i32** %xaa
+    %p = getelementptr i32*, i32** %a2, i64 %x
+    store i32* zeroinitializer, i32** %p
+    %xca = insertvalue { i32*, i32** } zeroinitializer, i32* %r, 0
+    %xda = insertvalue { i32*, i32** } %xca, i32** %a2, 1
+    %c_1 = extractvalue { i32*, i32** } %xda, 0
+    %c_2 = extractvalue { i32*, i32** } %xda, 1
+    %a = ptrtoint i32* null to i64
+    %b = ptrtoint i32* %c_1 to i64
+    %d = icmp eq i64 %a, %b
+    br i1 %d, label %thena, label %elsea
+
+  thena:
+    br label %ctd_ifa
+
+  elsea:
+    call void @DS_Clause_zcl_free_impl (i32* %c_1)
+    br label %ctd_ifa
+
+  ctd_ifa:
+    %a1a = extractvalue { i32*, i32** } %xda, 0
+    %ba = extractvalue { i32*, i32** } %xda, 1
+    %xea = insertvalue { i64, i32** } zeroinitializer, i64 %a1, 0
+    %x2 = insertvalue { i64, i32** } %xea, i32** %ba, 1
+    br label %ctd_if
+
+  else:
+    %xaa1 = insertvalue { i64, i32** } zeroinitializer, i64 %a1, 0
+    %x3 = insertvalue { i64, i32** } %xaa1, i32** %a2, 1
+    br label %ctd_if
+
+  ctd_if:
+    %x4 = phi { i64, i32** } [ %x3, %else ], [ %x2, %ctd_ifa ]
+    ret { i64, i32** } %x4
+}
+
+define { i64, i32** } @DS_Clause_Database_cdb_insert_impl(i64 %x, i32* %x1, { i64, i32** } %x2) #0 {
+
+  start:
+    %a1 = extractvalue { i64, i32** } %x2, 0
+    %a2 = extractvalue { i64, i32** } %x2, 1
+    %xb = icmp slt i64 %x, %a1
+    br i1 %xb, label %then, label %else
+
+  then:
+    %xaa = insertvalue { i64, i32** } zeroinitializer, i64 %a1, 0
+    %x3 = insertvalue { i64, i32** } %xaa, i32** %a2, 1
+    br label %ctd_if
+
+  else:
+    %r = sub i64 0, 1
+    %xaa1 = lshr i64 %r, 1
+    %xba = udiv i64 %xaa1, 2
+    %xca = icmp sle i64 %xba, %a1
+    br i1 %xca, label %thena, label %elsea
+
+  thena:
+    %xda = add i64 %x, 1
+    %xea = call i32** @LRAT_Sepref_Base_wo_grow_impl (i64 %a1, i32** %a2, i64 %xda)
+    %xfa = insertvalue { i64, i32** } zeroinitializer, i64 %xda, 0
+    %x4 = insertvalue { i64, i32** } %xfa, i32** %xea, 1
+    br label %ctd_ifa
+
+  elsea:
+    %xda1 = mul i64 2, %a1
+    %xea1 = add i64 %x, 1
+    %xfa1 = icmp sle i64 %xda1, %xea1
+    br i1 %xfa1, label %thenb, label %elseb
+
+  thenb:
+    %x5 = add i64 %x, 1
+    br label %ctd_ifb
+
+  elseb:
+    %x6 = mul i64 2, %a1
+    br label %ctd_ifb
+
+  ctd_ifb:
+    %xg = phi i64 [ %x6, %elseb ], [ %x5, %thenb ]
+    %xh = call i32** @LRAT_Sepref_Base_wo_grow_impl (i64 %a1, i32** %a2, i64 %xg)
+    %xia = insertvalue { i64, i32** } zeroinitializer, i64 %xg, 0
+    %x7 = insertvalue { i64, i32** } %xia, i32** %xh, 1
+    br label %ctd_ifa
+
+  ctd_ifa:
+    %x8 = phi { i64, i32** } [ %x7, %ctd_ifb ], [ %x4, %thena ]
+    br label %ctd_if
+
+  ctd_if:
+    %xaa2 = phi { i64, i32** } [ %x8, %ctd_ifa ], [ %x3, %then ]
+    %a1a = extractvalue { i64, i32** } %xaa2, 0
+    %a2a = extractvalue { i64, i32** } %xaa2, 1
+    %xba1 = getelementptr i32*, i32** %a2a, i64 %x
+    %r1 = load i32*, i32** %xba1
+    %p = getelementptr i32*, i32** %a2a, i64 %x
+    store i32* %x1, i32** %p
+    %xda2 = insertvalue { i32*, i32** } zeroinitializer, i32* %r1, 0
+    %xea2 = insertvalue { i32*, i32** } %xda2, i32** %a2a, 1
+    %c_1 = extractvalue { i32*, i32** } %xea2, 0
+    %c_2 = extractvalue { i32*, i32** } %xea2, 1
+    %a = ptrtoint i32* null to i64
+    %b = ptrtoint i32* %c_1 to i64
+    %d = icmp eq i64 %a, %b
+    br i1 %d, label %thenc, label %elsec
+
+  thenc:
+    br label %ctd_ifc
+
+  elsec:
+    call void @DS_Clause_zcl_free_impl (i32* %c_1)
+    br label %ctd_ifc
+
+  ctd_ifc:
+    %a1b = extractvalue { i32*, i32** } %xea2, 0
+    %ba = extractvalue { i32*, i32** } %xea2, 1
+    %xfa2 = insertvalue { i64, i32** } zeroinitializer, i64 %a1a, 0
+    %x9 = insertvalue { i64, i32** } %xfa2, i32** %ba, 1
+    ret { i64, i32** } %x9
+}
+
+define void @DS_Reversible_Assignment_rpan_free({ { i64, i1* }, { i64, { i64, i32* } } } %x) #0 {
+
+  start:
+    %a = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x, 0
+    %b = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x, 1
+    %xc = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } zeroinitializer, { i64, i1* } %a, 0
+    %xd = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
+    %tmpb = insertvalue { { i64, { i64, i32* } }, i1 } %xd, i1 zeroinitializer, 1
+    %tmpc = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpb, 1
+    %c_1 = extractvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
+    %aa = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x, 0
+    %ba = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x, 1
+    %xba = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } zeroinitializer, { i64, i1* } %aa, 0
+    %xj = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
+    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xj, i1 zeroinitializer, 1
+    %tmpad = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
+    %c_2 = extractvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
+    %a1 = extractvalue { i64, i1* } %c_1, 0
+    %xfa = extractvalue { i64, i1* } %c_1, 1
+    call void @LLVM_DS_NArray_narray_free2 (i1* %xfa)
+    %c_11 = extractvalue { { i64, { i64, i32* } }, i1 } %c_2, 0
+    %c_21 = extractvalue { { i64, { i64, i32* } }, i1 } %c_2, 1
+    %uua = extractvalue { i64, { i64, i32* } } %c_11, 0
+    %xaaa = extractvalue { i64, { i64, i32* } } %c_11, 1
+    %uub = extractvalue { i64, i32* } %xaaa, 0
+    %xbaa = extractvalue { i64, i32* } %xaaa, 1
+    call void @LLVM_DS_NArray_narray_free (i32* %xbaa)
+    ret void
+}
+
 define { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } @LRAT_Checker_Impl_add_literal_impl(i32 %x, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } %x1) #0 {
 
   start:
@@ -1698,7 +1531,7 @@ define { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, 
     %xaa = extractvalue { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %xb, 1
     %a1b = extractvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xaa, 0
     %a2b = extractvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xaa, 1
-    %xba = call { i32, { i64, { i64, i32* } } } @Zero_Term_cbld_add_lit_impl (i32 %x, { i32, { i64, { i64, i32* } } } %a1b)
+    %xba = call { i32, { i64, { i64, i32* } } } @DS_Clause_Builder_cbld_add_lit_impl (i32 %x, { i32, { i64, { i64, i32* } } } %a1b)
     %xca = xor i32 %x, 1
     %a = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %a1a, 0
     %b = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %a1a, 1
@@ -1733,7 +1566,7 @@ define { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, 
     br label %ctd_if
 
   else:
-    %x3 = call { i64, i1* } @Trailed_Assignment_bla_set_checked_aux_impl ({ i64, i1* } %a1c, i32 %xca, i1 1)
+    %x3 = call { i64, i1* } @DS_Reversible_Assignment_bla_set_checked_aux_impl ({ i64, i1* } %a1c, i32 %xca, i1 1)
     br label %ctd_if
 
   ctd_if:
@@ -1800,7 +1633,7 @@ define { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, 
     %xba = extractvalue { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } %xaa, 1
     %a1c = extractvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %xba, 0
     %a2c = extractvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %xba, 1
-    %xca = call { { i64, i1* }, { i64, { i64, i32* } } } @Trailed_Assignment_rpan_clear_impl (i64 %x, { { i64, i1* }, { i64, { i64, i32* } } } %a2c)
+    %xca = call { { i64, i1* }, { i64, { i64, i32* } } } @DS_Reversible_Assignment_rpan_clear_impl (i64 %x, { { i64, i1* }, { i64, { i64, i32* } } } %a2c)
     %xda = insertvalue { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } zeroinitializer, i1 %a1, 0
     %xja = insertvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } zeroinitializer, { i32, { i64, { i64, i32* } } } %a1c, 0
     %tmpaa = insertvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xja, { i64, i32** } %a1b, 1
@@ -1828,125 +1661,6 @@ define { i1, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, {
     %tmpbc = insertvalue { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } %xka, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %tmpab, 1
     %x1 = insertvalue { i1, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } } %xg, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } %tmpbc, 1
     ret { i1, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } } %x1
-}
-
-define { { i64, i1* }, { i64, { i64, i32* } } } @Trailed_Assignment_rpan_clear_impl(i64 %x, { { i64, i1* }, { i64, { i64, i32* } } } %x1) #0 {
-
-  start:
-    %a = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x1, 0
-    %b = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x1, 1
-    %xc = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } zeroinitializer, { i64, i1* } %a, 0
-    %xda = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
-    %tmpba = insertvalue { { i64, { i64, i32* } }, i1 } %xda, i1 zeroinitializer, 1
-    %tmpc = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpba, 1
-    %a1 = extractvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
-    %aa = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x1, 0
-    %ba = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x1, 1
-    %xba = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } zeroinitializer, { i64, i1* } %aa, 0
-    %xia = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
-    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xia, i1 zeroinitializer, 1
-    %tmpad = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
-    %xdaa = extractvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
-    %a1a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 0
-    %a2a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 1
-    %xga = insertvalue { i64, { i64, i1* } } zeroinitializer, i64 0, 0
-    %xha = insertvalue { i64, { i64, i1* } } %xga, { i64, i1* } %a1, 1
-    br label %while_start
-
-  while_start:
-    %xaaa = phi { i64, { i64, i1* } } [ %x3, %while_body ], [ %xha, %start ]
-    %a1b = extractvalue { i64, { i64, i1* } } %xaaa, 0
-    %a2b = extractvalue { i64, { i64, i1* } } %xaaa, 1
-    %l = extractvalue { i64, { i64, i32* } } %a1a, 0
-    %xbaa = extractvalue { i64, { i64, i32* } } %a1a, 1
-    %c = extractvalue { i64, i32* } %xbaa, 0
-    %ab = extractvalue { i64, i32* } %xbaa, 1
-    %xdaaa = icmp slt i64 %a1b, %l
-    %x2 = and i1 %xdaaa, 1
-    br i1 %x2, label %while_body, label %while_end
-
-  while_body:
-    %a1b1 = extractvalue { i64, { i64, i1* } } %xaaa, 0
-    %a2b1 = extractvalue { i64, { i64, i1* } } %xaaa, 1
-    %l1 = extractvalue { i64, { i64, i32* } } %a1a, 0
-    %xbaa1 = extractvalue { i64, { i64, i32* } } %a1a, 1
-    %c1 = extractvalue { i64, i32* } %xbaa1, 0
-    %ab1 = extractvalue { i64, i32* } %xbaa1, 1
-    %xcaa = getelementptr i32, i32* %ab1, i64 %a1b1
-    %xdaaa1 = load i32, i32* %xcaa
-    %xeaaa = zext i32 %xdaaa1 to i64
-    %a1c = extractvalue { i64, i1* } %a2b1, 0
-    %a2 = extractvalue { i64, i1* } %a2b1, 1
-    %p = getelementptr i1, i1* %a2, i64 %xeaaa
-    store i1 0, i1* %p
-    %xgaa = insertvalue { i64, i1* } zeroinitializer, i64 %a1c, 0
-    %xhaa = insertvalue { i64, i1* } %xgaa, i1* %a2, 1
-    %xiaaa = add i64 %a1b1, 1
-    %xjaaa = insertvalue { i64, { i64, i1* } } zeroinitializer, i64 %xiaaa, 0
-    %x3 = insertvalue { i64, { i64, i1* } } %xjaaa, { i64, i1* } %xhaa, 1
-    br label %while_start
-
-  while_end:
-    %l2 = extractvalue { i64, { i64, i32* } } %a1a, 0
-    %xbaa2 = extractvalue { i64, { i64, i32* } } %a1a, 1
-    %c2 = extractvalue { i64, i32* } %xbaa2, 0
-    %ab2 = extractvalue { i64, i32* } %xbaa2, 1
-    %xcaa1 = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 0, 0
-    %xna = insertvalue { i64, i32* } zeroinitializer, i64 %c2, 0
-    %tmpdaa = insertvalue { i64, i32* } %xna, i32* %ab2, 1
-    %xdaaa2 = insertvalue { i64, { i64, i32* } } %xcaa1, { i64, i32* } %tmpdaa, 1
-    %ac = extractvalue { i64, { i64, i1* } } %xaaa, 0
-    %tmpaba = extractvalue { i64, { i64, i1* } } %xaaa, 1
-    %xeaaa1 = insertvalue { { i64, i1* }, { i64, { i64, i32* } } } zeroinitializer, { i64, i1* } %tmpaba, 0
-    %x4 = insertvalue { { i64, i1* }, { i64, { i64, i32* } } } %xeaaa1, { i64, { i64, i32* } } %xdaaa2, 1
-    ret { { i64, i1* }, { i64, { i64, i32* } } } %x4
-}
-
-define { { i64, i1* }, { i64, { i64, i32* } } } @Trailed_Assignment_rpan_empty_impl(i32 %x, i64 %x1) #0 {
-
-  start:
-    %xa = or i32 %x, 1
-    %xaa = zext i32 %xa to i64
-    %xba = add i64 %xaa, 1
-    %tmp = icmp eq i64 %xba, 0
-    br i1 %tmp, label %then, label %else
-
-  then:
-    br label %ctd_if
-
-  else:
-    %t = getelementptr i1, i1* null, i64 1
-    %a = ptrtoint i1* %t to i64
-    %b = call i8* @isabelle_llvm_calloc (i64 %xba, i64 %a)
-    %x2 = bitcast i8* %b to i1*
-    br label %ctd_if
-
-  ctd_if:
-    %xca = phi i1* [ %x2, %else ], [ null, %then ]
-    %xda = insertvalue { i64, i1* } zeroinitializer, i64 %xba, 0
-    %xea = insertvalue { i64, i1* } %xda, i1* %xca, 1
-    %tmpb = icmp eq i64 8, 0
-    br i1 %tmpb, label %thena, label %elsea
-
-  thena:
-    br label %ctd_ifa
-
-  elsea:
-    %ta = getelementptr i32, i32* null, i64 1
-    %c = ptrtoint i32* %ta to i64
-    %d = call i8* @isabelle_llvm_calloc (i64 8, i64 %c)
-    %x3 = bitcast i8* %d to i32*
-    br label %ctd_ifa
-
-  ctd_ifa:
-    %aa = phi i32* [ %x3, %elsea ], [ null, %thena ]
-    %xfa = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 0, 0
-    %xha = insertvalue { i64, i32* } zeroinitializer, i64 8, 0
-    %tmpda = insertvalue { i64, i32* } %xha, i32* %aa, 1
-    %xga = insertvalue { i64, { i64, i32* } } %xfa, { i64, i32* } %tmpda, 1
-    %xhaa = insertvalue { { i64, i1* }, { i64, { i64, i32* } } } zeroinitializer, { i64, i1* } %xea, 0
-    %x4 = insertvalue { { i64, i1* }, { i64, { i64, i32* } } } %xhaa, { i64, { i64, i32* } } %xga, 1
-    ret { { i64, i1* }, { i64, { i64, i32* } } } %x4
 }
 
 define { i1, i64 } @CNF_Parser_Impl_parse_comments_impl({ i8*, i64 } %x, i64 %x1) #0 {
@@ -2130,6 +1844,42 @@ define { i1, i64 } @CNF_Parser_Impl_parse_comments_impl({ i8*, i64 } %x, i64 %x1
     ret { i1, i64 } %x18
 }
 
+define { i32, { i64, { i64, i32* } } } @DS_Clause_Builder_cbld_add_lit_impl(i32 %x, { i32, { i64, { i64, i32* } } } %x1) #0 {
+
+  start:
+    %a = extractvalue { i32, { i64, { i64, i32* } } } %x1, 0
+    %b = extractvalue { i32, { i64, { i64, i32* } } } %x1, 1
+    %xc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %a, 0
+    %xda = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
+    %tmpba = insertvalue { { i64, { i64, i32* } }, i1 } %xda, i1 zeroinitializer, 1
+    %tmpc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpba, 1
+    %a1 = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
+    %aa = extractvalue { i32, { i64, { i64, i32* } } } %x1, 0
+    %ba = extractvalue { i32, { i64, { i64, i32* } } } %x1, 1
+    %xba = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %aa, 0
+    %xia = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
+    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xia, i1 zeroinitializer, 1
+    %tmpad = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
+    %xdaa = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
+    %a1a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 0
+    %a2a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 1
+    %xbaa = icmp ule i32 %x, %a1
+    br i1 %xbaa, label %then, label %else
+
+  then:
+    br label %ctd_if
+
+  else:
+    br label %ctd_if
+
+  ctd_if:
+    %xcaa = phi i32 [ %x, %else ], [ %a1, %then ]
+    %xdaaa = call { i64, { i64, i32* } } @DS_Clause_Buffer_cbuf_insert_impl (i32 %x, { i64, { i64, i32* } } %a1a)
+    %xeaaa = insertvalue { i32, { i64, { i64, i32* } } } zeroinitializer, i32 %xcaa, 0
+    %x2 = insertvalue { i32, { i64, { i64, i32* } } } %xeaaa, { i64, { i64, i32* } } %xdaaa, 1
+    ret { i32, { i64, { i64, i32* } } } %x2
+}
+
 define { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } @LRAT_Checker_Impl_finish_proof_impl(i64 %x, { i1, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } } %x1) #0 {
 
   start:
@@ -2144,7 +1894,7 @@ define { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64,
     br i1 %a1, label %then, label %else
 
   then:
-    %xca = call { i32, { i64, { i64, i32* } } } @Zero_Term_cbld_abort_clause_impl ({ i32, { i64, { i64, i32* } } } %a1c)
+    %xca = call { i32, { i64, { i64, i32* } } } @DS_Clause_Builder_cbld_abort_clause_impl ({ i32, { i64, { i64, i32* } } } %a1c)
     %xda = insertvalue { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } zeroinitializer, i1 %a1, 0
     %xj = insertvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } zeroinitializer, { i32, { i64, { i64, i32* } } } %xca, 0
     %tmpaa = insertvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %xj, { { i64, i1* }, { i64, { i64, i32* } } } %a1b, 1
@@ -2161,7 +1911,7 @@ define { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64,
 
   thena:
     call void @Debugging_Tools_ll_dbg_tag_err_code_impl (i64 4, i64 0)
-    %xea = call { i32, { i64, { i64, i32* } } } @Zero_Term_cbld_abort_clause_impl ({ i32, { i64, { i64, i32* } } } %a1c)
+    %xea = call { i32, { i64, { i64, i32* } } } @DS_Clause_Builder_cbld_abort_clause_impl ({ i32, { i64, { i64, i32* } } } %a1c)
     %xfa = insertvalue { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } zeroinitializer, i1 1, 0
     %xl1 = insertvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } zeroinitializer, { i32, { i64, { i64, i32* } } } %xea, 0
     %tmpab1 = insertvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %xl1, { { i64, i1* }, { i64, { i64, i32* } } } %a1b, 1
@@ -2173,11 +1923,11 @@ define { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64,
     br label %ctd_ifa
 
   elsea:
-    %xda1 = call i1 @Zero_Term_cbld_is_empty_impl ({ i32, { i64, { i64, i32* } } } %a1c)
-    %xea1 = call { i32*, { i32, { i64, { i64, i32* } } } } @Zero_Term_cbld_finish_clause_impl ({ i32, { i64, { i64, i32* } } } %a1c)
+    %xda1 = call i1 @DS_Clause_Builder_cbld_is_empty_impl ({ i32, { i64, { i64, i32* } } } %a1c)
+    %xea1 = call { i32*, { i32, { i64, { i64, i32* } } } } @DS_Clause_Builder_cbld_finish_clause_impl ({ i32, { i64, { i64, i32* } } } %a1c)
     %a1d = extractvalue { i32*, { i32, { i64, { i64, i32* } } } } %xea1, 0
     %a2d = extractvalue { i32*, { i32, { i64, { i64, i32* } } } } %xea1, 1
-    %xfa1 = call { i64, i32** } @Zero_Term_cdb_insert_impl (i64 %x, i32* %a1d, { i64, i32** } %a2c)
+    %xfa1 = call { i64, i32** } @DS_Clause_Database_cdb_insert_impl (i64 %x, i32* %a1d, { i64, i32** } %a2c)
     %xga = insertvalue { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } zeroinitializer, i1 0, 0
     %xm1 = insertvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } zeroinitializer, { i32, { i64, { i64, i32* } } } %a2d, 0
     %tmpb1 = insertvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %xm1, { { i64, i1* }, { i64, { i64, i32* } } } %a1b, 1
@@ -2212,7 +1962,7 @@ define { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } @CNF_Parser_
     %xb = extractvalue { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %x1, 1
     %a1a = extractvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xb, 0
     %a2a = extractvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xb, 1
-    %xaa = call { i32, { i64, { i64, i32* } } } @Zero_Term_cbld_add_lit_impl (i32 %x, { i32, { i64, { i64, i32* } } } %a1a)
+    %xaa = call { i32, { i64, { i64, i32* } } } @DS_Clause_Builder_cbld_add_lit_impl (i32 %x, { i32, { i64, { i64, i32* } } } %a1a)
     %xba = insertvalue { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } zeroinitializer, i64 %a1, 0
     %xfa = insertvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } zeroinitializer, { i32, { i64, { i64, i32* } } } %xaa, 0
     %tmpaa = insertvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xfa, { i64, i32** } %a2a, 1
@@ -2402,16 +2152,70 @@ define { { { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } }, i1 }, i
     ret { { { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } }, i1 }, i64 } %x17
 }
 
+define i1 @DS_Clause_Builder_cbld_is_empty_impl({ i32, { i64, { i64, i32* } } } %x) #0 {
+
+  start:
+    %a = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
+    %b = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
+    %xc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %a, 0
+    %xd = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
+    %tmpb = insertvalue { { i64, { i64, i32* } }, i1 } %xd, i1 zeroinitializer, 1
+    %tmpc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpb, 1
+    %a1 = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
+    %aa = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
+    %ba = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
+    %xba = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %aa, 0
+    %xj = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
+    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xj, i1 zeroinitializer, 1
+    %tmpad = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
+    %xda = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
+    %a1a = extractvalue { { i64, { i64, i32* } }, i1 } %xda, 0
+    %a2a = extractvalue { { i64, { i64, i32* } }, i1 } %xda, 1
+    %l = extractvalue { i64, { i64, i32* } } %a1a, 0
+    %xaaa = extractvalue { i64, { i64, i32* } } %a1a, 1
+    %c = extractvalue { i64, i32* } %xaaa, 0
+    %ab = extractvalue { i64, i32* } %xaaa, 1
+    %xcaa = icmp eq i64 %l, 0
+    %xdaa = insertvalue { i32, { i64, { i64, i32* } } } zeroinitializer, i32 %a1, 0
+    %xeaa = insertvalue { i32, { i64, { i64, i32* } } } %xdaa, { i64, { i64, i32* } } %a1a, 1
+    ret i1 %xcaa
+}
+
+define i1 @DS_Clause_Database_cdb_contains_impl(i64 %x, { i64, i32** } %x1) #0 {
+
+  start:
+    %a1 = extractvalue { i64, i32** } %x1, 0
+    %a2 = extractvalue { i64, i32** } %x1, 1
+    %x2 = icmp slt i64 %x, %a1
+    br i1 %x2, label %then, label %else
+
+  then:
+    %xa = getelementptr i32*, i32** %a2, i64 %x
+    %xb = load i32*, i32** %xa
+    %a = ptrtoint i32* null to i64
+    %b = ptrtoint i32* %xb to i64
+    %xc = icmp eq i64 %a, %b
+    %x3 = add i1 %xc, 1
+    br label %ctd_if
+
+  else:
+    br label %ctd_if
+
+  ctd_if:
+    %x4 = phi i1 [ 0, %else ], [ %x3, %then ]
+    ret i1 %x4
+}
+
 define { i32, i1 } @LRAT_Checker_Impl_cdb_check_uot_impl({ { i64, i1* }, { i64, { i64, i32* } } } %x, { i64, i32** } %x1, i64 %x2) #0 {
 
   start:
-    %x3 = call i1 @Zero_Term_cdb_contains_impl (i64 %x2, { i64, i32** } %x1)
+    %x3 = call i1 @DS_Clause_Database_cdb_contains_impl (i64 %x2, { i64, i32** } %x1)
     br i1 %x3, label %then, label %else
 
   then:
     %xb = insertvalue { i32, i1 } zeroinitializer, i32 0, 0
     %y = insertvalue { i32, i1 } %xb, i1 0, 1
-    %x4 = call { i32, i1 } @Monadify_M_CONST_Zero_Term_cdb_iterate_clause_impl_MMonad_Mreturn_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_xor_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Product_Type_prod_case_prod_Product_Type_Pair_Product_Type_Pair_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Product_Type_prod_case_prod_Product_Type_Pair_Product_Type_Pair_LLVM_Shallow_llvm_rep_class_init_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_zext_Pure_type_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_ofs_ptr_MMonad_Mbind_LLVM_Shallow_ll_load_LLVM_Shallow_llc_if_MMonad_Mbind_LLVM_Shallow_ll_insert_value_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_LLVM_Shallow_ll_insert_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_icmp_eq_Groups_zero_class_zero_LLVM_Shallow_llc_if_MMonad_Mbind_LLVM_Shallow_ll_insert_value_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_LLVM_Shallow_ll_insert_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_zext_Pure_type_MMonad_Mbind_Debugging_Tools_ll_dbg_tag_err_code_impl_Num_numeral_class_numeral_Num_num_Bit0_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_zext_Pure_type_MMonad_Mbind_Debugging_Tools_ll_dbg_tag_err_code_impl_Num_numeral_class_numeral_Num_num_Bit0_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_insert_value_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_LLVM_Shallow_ll_insert_value_Num_numeral_class_numeral_Num_num_One_Num_numeral_class_numeral_Num_num_One ({ i64, i32** } %x1, i64 %x2, { { i64, i1* }, { i64, { i64, i32* } } } %x, { i32, i1 } %y)
+    %x4 = call { i32, i1 } @Monadify_M_CONST_DS_Clause_Database_cdb_iterate_clause_impl_MMonad_Mreturn_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_xor_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Product_Type_prod_case_prod_Product_Type_Pair_Product_Type_Pair_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Product_Type_prod_case_prod_Product_Type_Pair_Product_Type_Pair_LLVM_Shallow_llvm_rep_class_init_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_zext_Pure_type_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_ofs_ptr_MMonad_Mbind_LLVM_Shallow_ll_load_LLVM_Shallow_llc_if_MMonad_Mbind_LLVM_Shallow_ll_insert_value_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_LLVM_Shallow_ll_insert_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_icmp_eq_Groups_zero_class_zero_LLVM_Shallow_llc_if_MMonad_Mbind_LLVM_Shallow_ll_insert_value_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_LLVM_Shallow_ll_insert_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_zext_Pure_type_MMonad_Mbind_Debugging_Tools_ll_dbg_tag_err_code_impl_Num_numeral_class_numeral_Num_num_Bit0_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_zext_Pure_type_MMonad_Mbind_Debugging_Tools_ll_dbg_tag_err_code_impl_Num_numeral_class_numeral_Num_num_Bit0_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_insert_value_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_LLVM_Shallow_ll_insert_value_Num_numeral_class_numeral_Num_num_One_Num_numeral_class_numeral_Num_num_One ({ i64, i32** } %x1, i64 %x2, { { i64, i1* }, { i64, { i64, i32* } } } %x, { i32, i1 } %y)
     br label %ctd_if
 
   else:
@@ -2436,7 +2240,7 @@ define { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64,
     %xba = extractvalue { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } %xaa, 1
     %a1c = extractvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %xba, 0
     %a2c = extractvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %xba, 1
-    %xca = call { i64, i32** } @Zero_Term_cdb_delete_impl (i64 %x, { i64, i32** } %a1b)
+    %xca = call { i64, i32** } @DS_Clause_Database_cdb_delete_impl (i64 %x, { i64, i32** } %a1b)
     %xda = insertvalue { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } zeroinitializer, i1 %a1, 0
     %xja = insertvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } zeroinitializer, { i32, { i64, { i64, i32* } } } %a1c, 0
     %tmpaa = insertvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %xja, { { i64, i1* }, { i64, { i64, i32* } } } %a2c, 1
@@ -2714,6 +2518,30 @@ define { { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i6
     ret { { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } }, i64 } %x4
 }
 
+define i32 @DS_Clause_Builder_cbld_get_maxlit_impl({ i32, { i64, { i64, i32* } } } %x) #0 {
+
+  start:
+    %a = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
+    %b = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
+    %xc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %a, 0
+    %xd = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
+    %tmpb = insertvalue { { i64, { i64, i32* } }, i1 } %xd, i1 zeroinitializer, 1
+    %tmpc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpb, 1
+    %a1 = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
+    %aa = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
+    %ba = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
+    %xba = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %aa, 0
+    %xj = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
+    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xj, i1 zeroinitializer, 1
+    %tmpad = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
+    %xda = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
+    %a1a = extractvalue { { i64, { i64, i32* } }, i1 } %xda, 0
+    %a2a = extractvalue { { i64, { i64, i32* } }, i1 } %xda, 1
+    %xaaa = insertvalue { i32, { i64, { i64, i32* } } } zeroinitializer, i32 %a1, 0
+    %xbaa = insertvalue { i32, { i64, { i64, i32* } } } %xaaa, { i64, { i64, i32* } } %a1a, 1
+    ret i32 %a1
+}
+
 define void @Debugging_Tools_ll_dbg_tag_parsed_impl(i64 %x, i64 %x1) #0 {
 
   start:
@@ -2732,7 +2560,7 @@ define i1 @LRAT_Checker_Impl_read_check_lrat_impl({ i8*, i64 } %x) #0 {
 
   then:
     call void @LRAT_Checker_Impl_ll_dbg_tag_parsed_cnf_impl (i8 0)
-    call void @LRAT_Checker_Impl_nadf_free ({ i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } %a1)
+    call void @LRAT_Checker_Impl_cs_op_free ({ i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } %a1)
     br label %ctd_if
 
   else:
@@ -2924,6 +2752,150 @@ define { { i1, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64,
     %xbaa2 = insertvalue { { i1, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } }, { i64, { i64, { i64, i8* } } } } zeroinitializer, { i1, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } } %a12, 0
     %x7 = insertvalue { { i1, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } }, { i64, { i64, { i64, i8* } } } } %xbaa2, { i64, { i64, { i64, i8* } } } %a1a2, 1
     ret { { i1, { i1, { { { i64, i1* }, { i64, { i64, i32* } } }, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } }, { i64, { i64, { i64, i8* } } } } %x7
+}
+
+define { i32, { i64, { i64, i32* } } } @DS_Clause_Builder_cbld_abort_clause_impl({ i32, { i64, { i64, i32* } } } %x) #0 {
+
+  start:
+    %a = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
+    %b = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
+    %xc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %a, 0
+    %xda = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
+    %tmpba = insertvalue { { i64, { i64, i32* } }, i1 } %xda, i1 zeroinitializer, 1
+    %tmpc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpba, 1
+    %a1 = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
+    %aa = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
+    %ba = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
+    %xba = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %aa, 0
+    %xja = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
+    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xja, i1 zeroinitializer, 1
+    %tmpad = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
+    %xdaa = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
+    %a1a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 0
+    %a2a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 1
+    %xaaa = call { i64, { i64, i32* } } @DS_Clause_Buffer_cbuf_flush_impl ({ i64, { i64, i32* } } %a1a)
+    %xbaa = insertvalue { i32, { i64, { i64, i32* } } } zeroinitializer, i32 %a1, 0
+    %x1 = insertvalue { i32, { i64, { i64, i32* } } } %xbaa, { i64, { i64, i32* } } %xaaa, 1
+    ret { i32, { i64, { i64, i32* } } } %x1
+}
+
+define { { i64, i1* }, { i64, { i64, i32* } } } @DS_Reversible_Assignment_rpan_clear_impl(i64 %x, { { i64, i1* }, { i64, { i64, i32* } } } %x1) #0 {
+
+  start:
+    %a = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x1, 0
+    %b = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x1, 1
+    %xc = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } zeroinitializer, { i64, i1* } %a, 0
+    %xda = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
+    %tmpba = insertvalue { { i64, { i64, i32* } }, i1 } %xda, i1 zeroinitializer, 1
+    %tmpc = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpba, 1
+    %a1 = extractvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
+    %aa = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x1, 0
+    %ba = extractvalue { { i64, i1* }, { i64, { i64, i32* } } } %x1, 1
+    %xba = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } zeroinitializer, { i64, i1* } %aa, 0
+    %xia = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
+    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xia, i1 zeroinitializer, 1
+    %tmpad = insertvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
+    %xdaa = extractvalue { { i64, i1* }, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
+    %a1a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 0
+    %a2a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 1
+    %xga = insertvalue { i64, { i64, i1* } } zeroinitializer, i64 0, 0
+    %xha = insertvalue { i64, { i64, i1* } } %xga, { i64, i1* } %a1, 1
+    br label %while_start
+
+  while_start:
+    %xaaa = phi { i64, { i64, i1* } } [ %x3, %while_body ], [ %xha, %start ]
+    %a1b = extractvalue { i64, { i64, i1* } } %xaaa, 0
+    %a2b = extractvalue { i64, { i64, i1* } } %xaaa, 1
+    %l = extractvalue { i64, { i64, i32* } } %a1a, 0
+    %xbaa = extractvalue { i64, { i64, i32* } } %a1a, 1
+    %c = extractvalue { i64, i32* } %xbaa, 0
+    %ab = extractvalue { i64, i32* } %xbaa, 1
+    %xdaaa = icmp slt i64 %a1b, %l
+    %x2 = and i1 %xdaaa, 1
+    br i1 %x2, label %while_body, label %while_end
+
+  while_body:
+    %a1b1 = extractvalue { i64, { i64, i1* } } %xaaa, 0
+    %a2b1 = extractvalue { i64, { i64, i1* } } %xaaa, 1
+    %l1 = extractvalue { i64, { i64, i32* } } %a1a, 0
+    %xbaa1 = extractvalue { i64, { i64, i32* } } %a1a, 1
+    %c1 = extractvalue { i64, i32* } %xbaa1, 0
+    %ab1 = extractvalue { i64, i32* } %xbaa1, 1
+    %xcaa = getelementptr i32, i32* %ab1, i64 %a1b1
+    %xdaaa1 = load i32, i32* %xcaa
+    %xeaaa = zext i32 %xdaaa1 to i64
+    %a1c = extractvalue { i64, i1* } %a2b1, 0
+    %a2 = extractvalue { i64, i1* } %a2b1, 1
+    %p = getelementptr i1, i1* %a2, i64 %xeaaa
+    store i1 0, i1* %p
+    %xgaa = insertvalue { i64, i1* } zeroinitializer, i64 %a1c, 0
+    %xhaa = insertvalue { i64, i1* } %xgaa, i1* %a2, 1
+    %xiaaa = add i64 %a1b1, 1
+    %xjaaa = insertvalue { i64, { i64, i1* } } zeroinitializer, i64 %xiaaa, 0
+    %x3 = insertvalue { i64, { i64, i1* } } %xjaaa, { i64, i1* } %xhaa, 1
+    br label %while_start
+
+  while_end:
+    %l2 = extractvalue { i64, { i64, i32* } } %a1a, 0
+    %xbaa2 = extractvalue { i64, { i64, i32* } } %a1a, 1
+    %c2 = extractvalue { i64, i32* } %xbaa2, 0
+    %ab2 = extractvalue { i64, i32* } %xbaa2, 1
+    %xcaa1 = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 0, 0
+    %xna = insertvalue { i64, i32* } zeroinitializer, i64 %c2, 0
+    %tmpdaa = insertvalue { i64, i32* } %xna, i32* %ab2, 1
+    %xdaaa2 = insertvalue { i64, { i64, i32* } } %xcaa1, { i64, i32* } %tmpdaa, 1
+    %ac = extractvalue { i64, { i64, i1* } } %xaaa, 0
+    %tmpaba = extractvalue { i64, { i64, i1* } } %xaaa, 1
+    %xeaaa1 = insertvalue { { i64, i1* }, { i64, { i64, i32* } } } zeroinitializer, { i64, i1* } %tmpaba, 0
+    %x4 = insertvalue { { i64, i1* }, { i64, { i64, i32* } } } %xeaaa1, { i64, { i64, i32* } } %xdaaa2, 1
+    ret { { i64, i1* }, { i64, { i64, i32* } } } %x4
+}
+
+define { { i64, i1* }, { i64, { i64, i32* } } } @DS_Reversible_Assignment_rpan_empty_impl(i32 %x, i64 %x1) #0 {
+
+  start:
+    %xa = or i32 %x, 1
+    %xaa = zext i32 %xa to i64
+    %xba = add i64 %xaa, 1
+    %tmp = icmp eq i64 %xba, 0
+    br i1 %tmp, label %then, label %else
+
+  then:
+    br label %ctd_if
+
+  else:
+    %t = getelementptr i1, i1* null, i64 1
+    %a = ptrtoint i1* %t to i64
+    %b = call i8* @isabelle_llvm_calloc (i64 %xba, i64 %a)
+    %x2 = bitcast i8* %b to i1*
+    br label %ctd_if
+
+  ctd_if:
+    %xca = phi i1* [ %x2, %else ], [ null, %then ]
+    %xda = insertvalue { i64, i1* } zeroinitializer, i64 %xba, 0
+    %xea = insertvalue { i64, i1* } %xda, i1* %xca, 1
+    %tmpb = icmp eq i64 8, 0
+    br i1 %tmpb, label %thena, label %elsea
+
+  thena:
+    br label %ctd_ifa
+
+  elsea:
+    %ta = getelementptr i32, i32* null, i64 1
+    %c = ptrtoint i32* %ta to i64
+    %d = call i8* @isabelle_llvm_calloc (i64 8, i64 %c)
+    %x3 = bitcast i8* %d to i32*
+    br label %ctd_ifa
+
+  ctd_ifa:
+    %aa = phi i32* [ %x3, %elsea ], [ null, %thena ]
+    %xfa = insertvalue { i64, { i64, i32* } } zeroinitializer, i64 0, 0
+    %xha = insertvalue { i64, i32* } zeroinitializer, i64 8, 0
+    %tmpda = insertvalue { i64, i32* } %xha, i32* %aa, 1
+    %xga = insertvalue { i64, { i64, i32* } } %xfa, { i64, i32* } %tmpda, 1
+    %xhaa = insertvalue { { i64, i1* }, { i64, { i64, i32* } } } zeroinitializer, { i64, i1* } %xea, 0
+    %x4 = insertvalue { { i64, i1* }, { i64, { i64, i32* } } } %xhaa, { i64, { i64, i32* } } %xga, 1
+    ret { { i64, i1* }, { i64, { i64, i32* } } } %x4
 }
 
 define void @Debugging_Tools_ll_dbg_tag_err_code_impl(i64 %x, i64 %x1) #0 {
@@ -3165,7 +3137,7 @@ define { i1, { i64, { i64, { i64, i8* } } } } @LRAT_Checker_Impl_main_checker_lo
     %r = insertvalue { i1, { i64, { i64, { i64, i8* } } } } %xea3, { i64, { i64, { i64, i8* } } } %a22, 1
     %c_1 = extractvalue { { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } }, { i64, { i64, { i64, i8* } } } } %xba, 0
     %c_2 = extractvalue { { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } }, { i64, { i64, { i64, i8* } } } } %xba, 1
-    call void @LRAT_Checker_Impl_nadf_free ({ i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } %c_1)
+    call void @LRAT_Checker_Impl_cs_op_free ({ i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } %c_1)
     ret { i1, { i64, { i64, { i64, i8* } } } } %r
 }
 
@@ -3196,7 +3168,7 @@ define { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } @CNF_Parser_
     %xb = extractvalue { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %x, 1
     %a1a = extractvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xb, 0
     %a2a = extractvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xb, 1
-    %xaa = call { i32, { i64, { i64, i32* } } } @Zero_Term_cbld_abort_clause_impl ({ i32, { i64, { i64, i32* } } } %a1a)
+    %xaa = call { i32, { i64, { i64, i32* } } } @DS_Clause_Builder_cbld_abort_clause_impl ({ i32, { i64, { i64, i32* } } } %a1a)
     %xba = insertvalue { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } zeroinitializer, i64 %a1, 0
     %xfa = insertvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } zeroinitializer, { i32, { i64, { i64, i32* } } } %xaa, 0
     %tmpaa = insertvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xfa, { i64, i32** } %a2a, 1
@@ -3244,6 +3216,34 @@ define { i1, i64 } @CNF_Parser_Impl_parse_maybe_p_header_impl({ i8*, i64 } %x, i
     ret { i1, i64 } %x7
 }
 
+define { i32*, { i32, { i64, { i64, i32* } } } } @DS_Clause_Builder_cbld_finish_clause_impl({ i32, { i64, { i64, i32* } } } %x) #0 {
+
+  start:
+    %a = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
+    %b = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
+    %xc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %a, 0
+    %xda = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %b, 0
+    %tmpba = insertvalue { { i64, { i64, i32* } }, i1 } %xda, i1 zeroinitializer, 1
+    %tmpc = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xc, { { i64, { i64, i32* } }, i1 } %tmpba, 1
+    %a1 = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpc, 0
+    %aa = extractvalue { i32, { i64, { i64, i32* } } } %x, 0
+    %ba = extractvalue { i32, { i64, { i64, i32* } } } %x, 1
+    %xba = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } zeroinitializer, i32 %aa, 0
+    %xja = insertvalue { { i64, { i64, i32* } }, i1 } zeroinitializer, { i64, { i64, i32* } } %ba, 0
+    %tmpac = insertvalue { { i64, { i64, i32* } }, i1 } %xja, i1 zeroinitializer, 1
+    %tmpad = insertvalue { i32, { { i64, { i64, i32* } }, i1 } } %xba, { { i64, { i64, i32* } }, i1 } %tmpac, 1
+    %xdaa = extractvalue { i32, { { i64, { i64, i32* } }, i1 } } %tmpad, 1
+    %a1a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 0
+    %a2a = extractvalue { { i64, { i64, i32* } }, i1 } %xdaa, 1
+    %xaaa = call i32* @DS_Clause_zcl_make_impl ({ i64, { i64, i32* } } %a1a)
+    %xbaa = call { i64, { i64, i32* } } @DS_Clause_Buffer_cbuf_flush_impl ({ i64, { i64, i32* } } %a1a)
+    %xcaa = insertvalue { i32, { i64, { i64, i32* } } } zeroinitializer, i32 %a1, 0
+    %xdaaa = insertvalue { i32, { i64, { i64, i32* } } } %xcaa, { i64, { i64, i32* } } %xbaa, 1
+    %xeaaa = insertvalue { i32*, { i32, { i64, { i64, i32* } } } } zeroinitializer, i32* %xaaa, 0
+    %x1 = insertvalue { i32*, { i32, { i64, { i64, i32* } } } } %xeaaa, { i32, { i64, { i64, i32* } } } %xdaaa, 1
+    ret { i32*, { i32, { i64, { i64, i32* } } } } %x1
+}
+
 define void @Debugging_Tools_ll_dbg_tag_info_code_impl(i64 %x, i64 %x1) #0 {
 
   start:
@@ -3282,10 +3282,10 @@ define { i1, { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } @CNF
     br i1 %xea1, label %thena, label %elsea
 
   thena:
-    %xfa = call { i32*, { i32, { i64, { i64, i32* } } } } @Zero_Term_cbld_finish_clause_impl ({ i32, { i64, { i64, i32* } } } %a1a)
+    %xfa = call { i32*, { i32, { i64, { i64, i32* } } } } @DS_Clause_Builder_cbld_finish_clause_impl ({ i32, { i64, { i64, i32* } } } %a1a)
     %a1c = extractvalue { i32*, { i32, { i64, { i64, i32* } } } } %xfa, 0
     %a2c = extractvalue { i32*, { i32, { i64, { i64, i32* } } } } %xfa, 1
-    %xga = call { i64, i32** } @Zero_Term_cdb_insert_impl (i64 %a1, i32* %a1c, { i64, i32** } %a2a)
+    %xga = call { i64, i32** } @DS_Clause_Database_cdb_insert_impl (i64 %a1, i32* %a1c, { i64, i32** } %a2a)
     %xha = insertvalue { i1, { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } zeroinitializer, i1 %a2b, 0
     %xo = insertvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } zeroinitializer, { i32, { i64, { i64, i32* } } } %a2c, 0
     %tmpb = insertvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xo, { i64, i32** } %xga, 1
@@ -3295,7 +3295,7 @@ define { i1, { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } @CNF
     br label %ctd_ifa
 
   elsea:
-    %xfa1 = call { i32, { i64, { i64, i32* } } } @Zero_Term_cbld_abort_clause_impl ({ i32, { i64, { i64, i32* } } } %a1a)
+    %xfa1 = call { i32, { i64, { i64, i32* } } } @DS_Clause_Builder_cbld_abort_clause_impl ({ i32, { i64, { i64, i32* } } } %a1a)
     %xga1 = insertvalue { i1, { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } } zeroinitializer, i1 %a2b, 0
     %xm = insertvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } zeroinitializer, { i32, { i64, { i64, i32* } } } %xfa1, 0
     %tmpb1 = insertvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xm, { i64, i32** } %a2a, 1
@@ -3426,7 +3426,36 @@ define { { { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } }, i1 }, i
     ret { { { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } }, i1 }, i64 } %x14
 }
 
-define { i64, i1* } @Trailed_Assignment_bla_set_checked_aux_impl({ i64, i1* } %x, i32 %x1, i1 %x2) #0 {
+define void @LRAT_Checker_Impl_ll_dbg_tag_parsed_cnf_impl(i8 %x) #0 {
+
+  start:
+    ret void
+}
+
+define { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } @LRAT_Checker_Impl_builder_finish_building_impl({ i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %x) #0 {
+
+  start:
+    %a1 = extractvalue { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %x, 0
+    %xb = extractvalue { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %x, 1
+    %a1a = extractvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xb, 0
+    %a2a = extractvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xb, 1
+    %xaa = call i32 @DS_Clause_Builder_cbld_get_maxlit_impl ({ i32, { i64, { i64, i32* } } } %a1a)
+    call void @Debugging_Tools_ll_dbg_tag_info_code_impl (i64 1, i64 %a1)
+    %xda = zext i32 %xaa to i64
+    call void @Debugging_Tools_ll_dbg_tag_info_code_impl (i64 2, i64 %xda)
+    %xfa = call { { i64, i1* }, { i64, { i64, i32* } } } @DS_Reversible_Assignment_rpan_empty_impl (i32 %xaa, i64 0)
+    %xga = insertvalue { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } zeroinitializer, i1 0, 0
+    %xha = insertvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } zeroinitializer, { i32, { i64, { i64, i32* } } } %a1a, 0
+    %tmpab = insertvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %xha, { { i64, i1* }, { i64, { i64, i32* } } } %xfa, 1
+    %xja = insertvalue { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } zeroinitializer, { i64, i32** } %a2a, 0
+    %tmpac = insertvalue { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } %xja, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %tmpab, 1
+    %xka = insertvalue { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } zeroinitializer, i1 0, 0
+    %tmpdc = insertvalue { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } %xka, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } %tmpac, 1
+    %x1 = insertvalue { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } %xga, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } %tmpdc, 1
+    ret { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } %x1
+}
+
+define { i64, i1* } @DS_Reversible_Assignment_bla_set_checked_aux_impl({ i64, i1* } %x, i32 %x1, i1 %x2) #0 {
 
   start:
     %a1 = extractvalue { i64, i1* } %x, 0
@@ -3488,36 +3517,7 @@ define { i64, i1* } @Trailed_Assignment_bla_set_checked_aux_impl({ i64, i1* } %x
     ret { i64, i1* } %x5
 }
 
-define void @LRAT_Checker_Impl_ll_dbg_tag_parsed_cnf_impl(i8 %x) #0 {
-
-  start:
-    ret void
-}
-
-define { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } @LRAT_Checker_Impl_builder_finish_building_impl({ i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %x) #0 {
-
-  start:
-    %a1 = extractvalue { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %x, 0
-    %xb = extractvalue { i64, { { i32, { i64, { i64, i32* } } }, { i64, i32** } } } %x, 1
-    %a1a = extractvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xb, 0
-    %a2a = extractvalue { { i32, { i64, { i64, i32* } } }, { i64, i32** } } %xb, 1
-    %xaa = call i32 @Zero_Term_cbld_get_maxlit_impl ({ i32, { i64, { i64, i32* } } } %a1a)
-    call void @Debugging_Tools_ll_dbg_tag_info_code_impl (i64 1, i64 %a1)
-    %xda = zext i32 %xaa to i64
-    call void @Debugging_Tools_ll_dbg_tag_info_code_impl (i64 2, i64 %xda)
-    %xfa = call { { i64, i1* }, { i64, { i64, i32* } } } @Trailed_Assignment_rpan_empty_impl (i32 %xaa, i64 0)
-    %xga = insertvalue { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } zeroinitializer, i1 0, 0
-    %xha = insertvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } zeroinitializer, { i32, { i64, { i64, i32* } } } %a1a, 0
-    %tmpab = insertvalue { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %xha, { { i64, i1* }, { i64, { i64, i32* } } } %xfa, 1
-    %xja = insertvalue { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } zeroinitializer, { i64, i32** } %a2a, 0
-    %tmpac = insertvalue { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } %xja, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } %tmpab, 1
-    %xka = insertvalue { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } zeroinitializer, i1 0, 0
-    %tmpdc = insertvalue { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } %xka, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } %tmpac, 1
-    %x1 = insertvalue { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } %xga, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } %tmpdc, 1
-    ret { i1, { i1, { { i64, i32** }, { { i32, { i64, { i64, i32* } } }, { { i64, i1* }, { i64, { i64, i32* } } } } } } } %x1
-}
-
-define void @Monadify_M_CONST_LRAT_Sepref_Base_woarray_free_impl_Sepref_HOL_Bindings_dflt_option_free_option_LLVM_Shallow_ll_ptrcmp_eq_LLVM_Shallow_null_Zero_Term_zcl_free_impl(i64 %x, i32** %x1) #0 {
+define void @Monadify_M_CONST_LRAT_Sepref_Base_woarray_free_impl_Sepref_HOL_Bindings_dflt_option_free_option_LLVM_Shallow_ll_ptrcmp_eq_LLVM_Shallow_null_DS_Clause_zcl_free_impl(i64 %x, i32** %x1) #0 {
 
   start:
     %xa = insertvalue { i64, i32** } zeroinitializer, i64 0, 0
@@ -3545,7 +3545,7 @@ define void @Monadify_M_CONST_LRAT_Sepref_Base_woarray_free_impl_Sepref_HOL_Bind
     br label %ctd_if
 
   else:
-    call void @Zero_Term_zcl_free_impl (i32* %r)
+    call void @DS_Clause_zcl_free_impl (i32* %r)
     br label %ctd_if
 
   ctd_if:
@@ -3561,7 +3561,7 @@ define void @Monadify_M_CONST_LRAT_Sepref_Base_woarray_free_impl_Sepref_HOL_Bind
     ret void
 }
 
-define { i32, i1 } @Monadify_M_CONST_Zero_Term_cdb_iterate_clause_impl_MMonad_Mreturn_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_xor_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Product_Type_prod_case_prod_Product_Type_Pair_Product_Type_Pair_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Product_Type_prod_case_prod_Product_Type_Pair_Product_Type_Pair_LLVM_Shallow_llvm_rep_class_init_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_zext_Pure_type_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_ofs_ptr_MMonad_Mbind_LLVM_Shallow_ll_load_LLVM_Shallow_llc_if_MMonad_Mbind_LLVM_Shallow_ll_insert_value_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_LLVM_Shallow_ll_insert_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_icmp_eq_Groups_zero_class_zero_LLVM_Shallow_llc_if_MMonad_Mbind_LLVM_Shallow_ll_insert_value_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_LLVM_Shallow_ll_insert_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_zext_Pure_type_MMonad_Mbind_Debugging_Tools_ll_dbg_tag_err_code_impl_Num_numeral_class_numeral_Num_num_Bit0_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_zext_Pure_type_MMonad_Mbind_Debugging_Tools_ll_dbg_tag_err_code_impl_Num_numeral_class_numeral_Num_num_Bit0_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_insert_value_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_LLVM_Shallow_ll_insert_value_Num_numeral_class_numeral_Num_num_One_Num_numeral_class_numeral_Num_num_One({ i64, i32** } %x, i64 %x1, { { i64, i1* }, { i64, { i64, i32* } } } %x2, { i32, i1 } %x3) #0 {
+define { i32, i1 } @Monadify_M_CONST_DS_Clause_Database_cdb_iterate_clause_impl_MMonad_Mreturn_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_xor_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Product_Type_prod_case_prod_Product_Type_Pair_Product_Type_Pair_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Product_Type_prod_case_prod_Product_Type_Pair_Product_Type_Pair_LLVM_Shallow_llvm_rep_class_init_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_zext_Pure_type_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Groups_zero_class_zero_MMonad_Mbind_LLVM_Shallow_ll_extract_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_ofs_ptr_MMonad_Mbind_LLVM_Shallow_ll_load_LLVM_Shallow_llc_if_MMonad_Mbind_LLVM_Shallow_ll_insert_value_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_LLVM_Shallow_ll_insert_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_icmp_eq_Groups_zero_class_zero_LLVM_Shallow_llc_if_MMonad_Mbind_LLVM_Shallow_ll_insert_value_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_LLVM_Shallow_ll_insert_value_Num_numeral_class_numeral_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_zext_Pure_type_MMonad_Mbind_Debugging_Tools_ll_dbg_tag_err_code_impl_Num_numeral_class_numeral_Num_num_Bit0_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_zext_Pure_type_MMonad_Mbind_Debugging_Tools_ll_dbg_tag_err_code_impl_Num_numeral_class_numeral_Num_num_Bit0_Num_num_One_MMonad_Mbind_LLVM_Shallow_ll_insert_value_LLVM_Shallow_llvm_rep_class_init_Groups_zero_class_zero_LLVM_Shallow_ll_insert_value_Num_numeral_class_numeral_Num_num_One_Num_numeral_class_numeral_Num_num_One({ i64, i32** } %x, i64 %x1, { { i64, i1* }, { i64, { i64, i32* } } } %x2, { i32, i1 } %x3) #0 {
 
   start:
     %a1 = extractvalue { i64, i32** } %x, 0

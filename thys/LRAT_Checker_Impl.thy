@@ -3,11 +3,8 @@ theory LRAT_Checker_Impl
 imports
   SAT_Basic 
   Relaxed_Assignment 
-  "Isabelle_LLVM.IICF" 
-  "Nat_Array_Dfun" 
-  Unsigned_Literal 
-  Trailed_Assignment 
-  Zero_Term
+  DS_Reversible_Assignment 
+  DS_Clause_Database
   
   Debugging_Tools
   
@@ -1007,7 +1004,7 @@ begin
     by sepref
     
 
-  synth_definition nadf_free [llvm_code] is [sepref_frame_free_rules]: "MK_FREE (cs_op_assn) \<hole>"
+  synth_definition cs_op_free [llvm_code] is [sepref_frame_free_rules]: "MK_FREE (cs_op_assn) \<hole>"
     unfolding cs_op_assn_def 
     by sepref_dbg_side (* TODO: Use proper tactic *)
     

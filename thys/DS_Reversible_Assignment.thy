@@ -1,5 +1,6 @@
-theory Trailed_Assignment
-imports Unsigned_Literal Relaxed_Assignment Sizes_Setup Proto_Sepref_Ghostvar
+section \<open>Reversible Assignment\<close>
+theory DS_Reversible_Assignment
+imports DS_Unsigned_Literal Relaxed_Assignment
 begin
 
 (* TODO: Move *)

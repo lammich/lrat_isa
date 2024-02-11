@@ -70,9 +70,11 @@ The verification is done wrt. a grammar of the DIMACS CNF format, and down to th
   * [Unit checking (check_uot)](THYS:LRAT_Checker_Impl.html#LRAT_Checker_Impl.cdb_check_uot|const) the inner loop of our checker.
 
   * Data Structures (the theories contain the abstract versions and the LLVM implementations)
-    * [Literal Encoding](THYS:Unsigned_Literal.html)
-    * [Reversible Partial Assignment](THYS:Trailed_Assignment.html)
-    * [Clauses, Builder, and Database](THYS:Zero_Term.html)
+    * [Literal Encoding](THYS:DS_Unsigned_Literal.html)
+    * [Reversible Partial Assignment](THYS:DS_Reversible_Assignment.html)
+    * [Clauses](THYS:DS_Clause.html)
+    * [Clause Builder](THYS:DS_Clause_Builder.html)
+    * [Clause Database](THYS:DS_Clause_Database.html)
 
     * Concrete checker states:
       [outside proof (op)](THYS:LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_out_proof|type)

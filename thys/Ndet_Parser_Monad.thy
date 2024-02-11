@@ -1,5 +1,5 @@
 theory Ndet_Parser_Monad
-imports Isabelle_LLVM.IICF
+imports LRAT_Sepref_Base
 begin
 
   (* TODO: Move *)  

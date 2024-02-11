@@ -1,4 +1,5 @@
-theory Unsigned_Literal
+section \<open>Encoding of Literals\<close>
+theory DS_Unsigned_Literal
 imports SAT_Basic LRAT_Sepref_Base
 begin
 

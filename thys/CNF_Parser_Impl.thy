@@ -1,7 +1,7 @@
 section \<open>CNF Parser\<close>
 
 theory CNF_Parser_Impl
-imports CNF_Grammar Debugging_Tools Zero_Term
+imports CNF_Grammar Debugging_Tools DS_Clause_Database
 begin
 
 context begin interpretation lang_syntax .    

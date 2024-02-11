@@ -1,6 +1,6 @@
 section \<open>DIMACS CNF Grammar\<close>
 theory CNF_Grammar
-imports Main Parser_Refine SAT_Basic Sizes_Setup Unsigned_Literal
+imports Main Parser_Refine SAT_Basic DS_Unsigned_Literal
 begin
   (* TODO: Move *)
 

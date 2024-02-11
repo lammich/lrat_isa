@@ -74,6 +74,31 @@ begin
       
   end    
 
+    
+  (* TODO: Move *)
+  (* Introduce vassn-tag for arbitrary parameters. Useful to extract parameter-independent conditions from assertions *)
+  lemma hfref_indep_vassn_tagI: 
+    assumes A: "\<And>x y. vassn_tag (fst RS x y) \<Longrightarrow> (a,c) \<in> [P]\<^sub>a [C]\<^sub>c RS \<rightarrow>\<^sub>d T [CP]\<^sub>c"
+    shows "(a,c) \<in> [P]\<^sub>a [C]\<^sub>c RS \<rightarrow>\<^sub>d T [CP]\<^sub>c"  
+    apply rule
+    apply (rule hn_refine_vassn_tagI)
+    apply (drule A)
+    by (blast dest: hfrefD)
+  
+        
+  (* TODO: Move *)
+  lemma hr_comp_empty1_iff[simp]: "hr_comp (\<lambda>_ _. sep_false) R = (\<lambda>_ _. sep_false)"
+    unfolding hr_comp_def
+    by auto
+  
+  lemma hr_comp_empty2_iff[simp]: "hr_comp A {} = (\<lambda>_ _. sep_false)"
+    unfolding hr_comp_def
+    by force  
+    
+  (* TODO: Move *)  
+  lemma vassn_tag_false[simp]: "\<not>vassn_tag (sep_false)"  
+    unfolding vassn_tag_def by blast
+  
   
   (* TODO: Move! And add more rules! *)  
   lemma move_resolve_ex_eq:
@@ -313,6 +338,15 @@ begin
         
   
   subsection \<open>More default initializer\<close>  
+  
+  (* TODO: Move *)
+  lemma init_hnr[sepref_fr_rules]: "(uncurry0 (Mreturn init), uncurry0 (RETURN init)) \<in> unit_assn\<^sup>k \<rightarrow>\<^sub>a id_assn"
+    apply sepref_to_hoare
+    by vcg  
+  
+  lemma GEN_ALGO_is_init_pure: "GEN_ALGO dflt (is_init A) \<Longrightarrow> is_pure A"
+    by (auto simp: is_init_def GEN_ALGO_def)  
+  
   
   (* More default initializer: The is_init is too weak, assuming pure assertions.
   

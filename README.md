@@ -70,9 +70,11 @@ The verification is done wrt. a grammar of the DIMACS CNF format, and down to th
   * [Unit checking (check_uot)](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/LRAT_Checker_Impl.html#LRAT_Checker_Impl.cdb_check_uot|const) the inner loop of our checker.
 
   * Data Structures (the theories contain the abstract versions and the LLVM implementations)
-    * [Literal Encoding](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Unsigned_Literal.html)
-    * [Reversible Partial Assignment](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Trailed_Assignment.html)
-    * [Clauses, Builder, and Database](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Zero_Term.html)
+    * [Literal Encoding](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/DS_Unsigned_Literal.html)
+    * [Reversible Partial Assignment](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/DS_Reversible_Assignment.html)
+    * [Clauses](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/DS_Clause.html)
+    * [Clause Builder](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/DS_Clause_Builder.html)
+    * [Clause Database](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/DS_Clause_Database.html)
 
     * Concrete checker states:
       [outside proof (op)](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_out_proof|type)

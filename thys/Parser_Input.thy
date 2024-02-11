@@ -1,6 +1,6 @@
 section \<open>Input\<close>
 theory Parser_Input
-imports Isabelle_LLVM.IICF Sizes_Setup
+imports LRAT_Sepref_Base
 begin
 
 subsection \<open>Abstract Input\<close>

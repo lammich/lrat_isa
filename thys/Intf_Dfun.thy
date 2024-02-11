@@ -1,5 +1,5 @@
 theory Intf_Dfun
-imports Isabelle_LLVM.IICF
+imports LRAT_Sepref_Base
 begin
 
 text \<open>Functions with default value\<close>
