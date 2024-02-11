@@ -18,28 +18,28 @@ our lrat_isa tool is called lrat_checker or lrat_llvm in this data.
 For example, the key "test_lrat_llvm_online/lrat_checker/mrs_size" is the maximum resident set size of our lrat_isa tool, during the lrat_llvm_online test.
 
 Here are the meanings of the keys:
-  *test_download: dummy to ensure problem was downloaded
-  *test_gen_lrat: dummy to ensure certificate files were present
+  * test_download: dummy to ensure problem was downloaded
+  * test_gen_lrat: dummy to ensure certificate files were present
 
-  *test_baseline: cadical without certificate generation
-  *test_gen_lrat: cadical and writes the certificate to a file
+  * test_baseline: cadical without certificate generation
+  * test_gen_lrat: cadical and writes the certificate to a file
 
-  *test_lrat_llvm_online: cadical and lrat_checker (aka lrat-isa) in streaming mode
-  *test_cake_online: cadical and cake_lpr in streaming mode
+  * test_lrat_llvm_online: cadical and lrat_checker (aka lrat-isa) in streaming mode
+  * test_cake_online: cadical and cake_lpr in streaming mode
 
-  *bcake_xxx_ratio: ratios of value xxx for cake_lpr vs. cadical without certificate generation
-  *fcake_xxx_ratio: ratios of value xxx for cake_lpr vs. cadical writing certificate to file
-  *blrat_xxx_ratio: ratios of value xxx for lrat_isa vs. cadical without certificate generation
-  *flrat_xxx_ratio: ratios of value xxx for lrat_isa vs. cadical writing certificate to file
+  * bcake_xxx_ratio: ratios of value xxx for cake_lpr vs. cadical without certificate generation
+  * fcake_xxx_ratio: ratios of value xxx for cake_lpr vs. cadical writing certificate to file
+  * blrat_xxx_ratio: ratios of value xxx for lrat_isa vs. cadical without certificate generation
+  * flrat_xxx_ratio: ratios of value xxx for lrat_isa vs. cadical writing certificate to file
 
-  *test_notrim_xxx / test_trim_xxx: checker xxx run on original / trimmed certificate. There are various subkeys indicating how the certificate was generated from the original binary encoded lrat file. They are not included in the derived ratio-fields, or in the reported times in the paper.
+  * test_notrim_xxx / test_trim_xxx: checker xxx run on original / trimmed certificate. There are various subkeys indicating how the certificate was generated from the original binary encoded lrat file. They are not included in the derived ratio-fields, or in the reported times in the paper.
   The checkers are:
-    *lrat_checker: Our tool, aka lrat_isa
-    *trim: The lrat-trim tool in forward mode
-    *lchk: The lrat-check tool that comes with drat-trim
-    *gratchk: The gratchk tool
-    *cake: cake_lpr
-    *acl2: The acl2 based lrat checker
+    * lrat_checker: Our tool, aka lrat_isa
+    * trim: The lrat-trim tool in forward mode
+    * lchk: The lrat-check tool that comes with drat-trim
+    * gratchk: The gratchk tool
+    * cake: cake_lpr
+    * acl2: The acl2 based lrat checker
 
 
 
