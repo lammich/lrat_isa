@@ -1,0 +1,40 @@
+\documentclass{standalone}
+% The following would be nicer, but is broken on Ubuntu 22.04 due to ghostscript PDF policy restrictions
+% \documentclass[convert={density=300,size=1080x800,outext=.png}]{standalone}
+
+\usepackage[T1]{fontenc}
+\usepackage{color}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+
+\begin{document}
+
+  \begin{tikzpicture}[thick,scale=1, every node/.style={scale=1}] %change the scales if you like to reduce the size
+    \begin{axis}[
+      legend style={font=\footnotesize, legend pos = south east},
+      xlabel={time / s},
+      ylabel={problems solved},
+%       xmin=.1, ymin=.1,xmax=10000,ymax=10000,
+    ]
+      \addplot[mark=x,black] table[x=val,y=num] {cdf_cadical.data};
+      \addlegendentry{Cadical no cert.};
+
+      \addplot[mark=o,green] table[x=val,y=num] {cdf_lrat_isa.data};
+      \addlegendentry{Cadical | lrat\_isa};
+
+      \addplot[mark=|,blue] table[x=val,y=num] {cdf_cake.data};
+      \addlegendentry{Cadical | cake\_lpr};
+
+%       \addplot[only marks,mark=x,black] table[x=val,y=num] {cdf_cadical.data};
+%       \addplot[domain=0.1:10000,smooth,mark=,color=black]{x};
+%       \addplot[domain=0.1:1000,dashed,mark=,color=black]{10*x};
+%       \addplot[domain=0.1:10000,dashed,mark=,color=black]{.1*x};
+    \end{axis}
+
+  \end{tikzpicture}
+
+\end{document}
+
+
+
