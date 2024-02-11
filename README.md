@@ -46,16 +46,16 @@
 
   * [Semantics of CNF](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/SAT_Basic.html), with our definition of [satisfiability](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/SAT_Basic.html#SAT_Basic.sat|const).
 
-  * [Abstract Checker](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Relaxed_Assignment.html#Relaxed_Assignment.checker_state|type) contains the abstract transition relation for the checker, and it's [correctness](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Relaxed_Assignment.html#Relaxed_Assignment.checker_trans_rtrancl_pres_invar|thm)
+  * [Abstract Checker](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Relaxed_Assignment.html#Relaxed_Assignment.checker_state|type) contains the abstract transition relation for the checker, and it's [correctness](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Relaxed_Assignment.html#Relaxed_Assignment.checker_trans_rtrancl_unsatI|thm)
 
   * Data Structures (the theories contain the abstract versions and the LLVM implementations)
     * [Literal Encoding](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Unsigned_Literal.html)
     * [Reversible Partial Assignment](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Trailed_Assignment.html)
-    * [Clause Database](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/ClauseDB.html)
+    * [Clauses, Builder, and Database](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/Zero_Term.html)
 
     * Concrete checker states:
       [outside proof (op)](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_out_proof|type)
-      [build-lemma (bl)](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_build_lemma|type)
+      [build-clause (bc)](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_build_lemma|type)
       [in proof (ip)](https://lammich.github.io/lrat_isa/Unsorted/lrat_isa/LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_in_proof|type)
 
 

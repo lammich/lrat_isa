@@ -46,16 +46,16 @@
 
   * [Semantics of CNF](THYS:SAT_Basic.html), with our definition of [satisfiability](THYS:SAT_Basic.html#SAT_Basic.sat|const).
 
-  * [Abstract Checker](THYS:Relaxed_Assignment.html#Relaxed_Assignment.checker_state|type) contains the abstract transition relation for the checker, and it's [correctness](THYS:Relaxed_Assignment.html#Relaxed_Assignment.checker_trans_rtrancl_pres_invar|thm)
+  * [Abstract Checker](THYS:Relaxed_Assignment.html#Relaxed_Assignment.checker_state|type) contains the abstract transition relation for the checker, and it's [correctness](THYS:Relaxed_Assignment.html#Relaxed_Assignment.checker_trans_rtrancl_unsatI|thm)
 
   * Data Structures (the theories contain the abstract versions and the LLVM implementations)
     * [Literal Encoding](THYS:Unsigned_Literal.html)
     * [Reversible Partial Assignment](THYS:Trailed_Assignment.html)
-    * [Clause Database](THYS:ClauseDB.html)
+    * [Clauses, Builder, and Database](THYS:Zero_Term.html)
 
     * Concrete checker states:
       [outside proof (op)](THYS:LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_out_proof|type)
-      [build-lemma (bl)](THYS:LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_build_lemma|type)
+      [build-clause (bc)](THYS:LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_build_lemma|type)
       [in proof (ip)](THYS:LRAT_Checker_Impl.html#LRAT_Checker_Impl.checker_state_in_proof|type)
 
 
