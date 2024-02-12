@@ -1,6 +1,6 @@
 # Benchmark data
 
-The measurements from our benchmarks are provided in csv and as key = value format.
+The raw log data from our benchmark runs, and some data extracted from it, in key-value and csv format.
 The csv format contains a few derived fields like ratios and combined user+system time,
 that are not part of the (raw) kv-data.
 
@@ -16,6 +16,8 @@ The benchmarks have been performed on our machine "two":
 Note that streaming mode is called online mode in this data, and
 our lrat_isa tool is called lrat_checker or lrat_llvm in this data.
 For example, the key "test_lrat_llvm_online/lrat_checker/mrs_size" is the maximum resident set size of our lrat_isa tool, during the lrat_llvm_online test.
+
+Also note that the mrs_size fields obtained by the time commands for the parallel runs seem not be accurate. We have not used these fields for our evaluation. The raw logging data also contains more accurate measurements obtained by runlim.
 
 Here are the meanings of the keys:
   * test_download: dummy to ensure problem was downloaded
