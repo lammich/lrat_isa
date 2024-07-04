@@ -1,5 +1,5 @@
 theory Ndet_Parser_Monad
-imports LRAT_Sepref_Base
+imports LRAT_Sepref_Base "HOL-Library.Complete_Partial_Order2"
 begin
 
   (* TODO: Move *)  
@@ -404,6 +404,18 @@ subsection \<open>Partial Function Setup\<close>
     by igr
     
     
+  lemma gM_rel_pointwise_mcont[cont_intro]: "mcont gM.lub_fun gM.le_fun \<Union> (\<subseteq>) (\<lambda>x. gM_rel (x args))"
+    apply (intro mcontI cont_intro)      
+    subgoal
+      apply (rule monotoneI)
+      by (simp add: fun_ord_def g_ord_def)    
+    subgoal
+      apply (rule)
+      by (simp add: g_lub_def)
+    done  
+    
+    
+    
 subsection \<open>More Combinators\<close>    
     
     
@@ -578,8 +590,68 @@ subsection \<open>More Combinators\<close>
       done
     done
 
+  paragraph \<open>Star as fixed Point\<close>  
+    
+  partial_function (gM) g_starr' where 
+    "g_starr' m fi = g_return (snd fi) <|> g_lift2 (fst fi) m (g_starr' m fi)" 
+
+  partial_function (gM) g_starl' where 
+    "g_starl' m fi = g_return (snd fi) <|> g_lift2 (fst fi) (g_starl' m fi) m" 
+    
+    
+    
+  lemma g_starr_as_fixp: "g_starr' m fi = g_starr m fi"
+    apply (simp add: igr_eq_iff igr_starr; safe)
+  proof -
+    fix w r n 
+    assume "(w, r) \<in> gM_rel (g_powr m fi n)"  
+    thus "(w, r) \<in> gM_rel (g_starr' m fi)"  
+      apply (induction n arbitrary: w r)
+      apply (subst g_starr'.simps)
+      apply (auto simp: igr_simps) []
+      apply (subst g_starr'.simps)
+      apply (auto simp: igr_simps; blast) []
+      done
+  next
+    fix w r 
+    assume "(w, r) \<in> gM_rel (g_starr' m fi)"  
+    thus "\<exists>n. (w, r) \<in> gM_rel (g_powr m fi n)"        
+      apply (induction arbitrary: w r rule: g_starr'.fixp_induct)
+      apply simp
+      apply (simp add: igr_simps)
+      apply (clarsimp simp: igr_simps; safe)
+      subgoal by (auto intro: exI[where x=0] simp: igr_simps)
+      subgoal by (force intro: exI[where x=0] exI[where x="Suc _"] simp: igr_simps)
+      done
+  qed
+
+  lemma g_starl_as_fixp: "g_starl' m fi = g_starl m fi"
+    apply (simp add: igr_eq_iff igr_starl; safe)
+  proof -
+    fix w r n 
+    assume "(w, r) \<in> gM_rel (g_powl m fi n)"  
+    thus "(w, r) \<in> gM_rel (g_starl' m fi)"  
+      apply (induction n arbitrary: w r)
+      apply (subst g_starl'.simps)
+      apply (auto simp: igr_simps) []
+      apply (subst g_starl'.simps)
+      apply (auto simp: igr_simps; blast) []
+      done
+  next
+    fix w r 
+    assume "(w, r) \<in> gM_rel (g_starl' m fi)"  
+    thus "\<exists>n. (w, r) \<in> gM_rel (g_powl m fi n)"        
+      apply (induction arbitrary: w r rule: g_starl'.fixp_induct)
+      apply simp
+      apply (simp add: igr_simps)
+      apply (clarsimp simp: igr_simps; safe)
+      subgoal by (auto intro: exI[where x=0] simp: igr_simps)
+      subgoal by (force intro: exI[where x=0] exI[where x="Suc _"] simp: igr_simps)
+      done
+  qed
+
   end  
-  
+      
 subsection \<open>Algebraic Structure of Cons,Append,Empty\<close>
 
   (*

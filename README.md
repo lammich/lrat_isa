@@ -17,7 +17,7 @@ The verification is done wrt. a grammar of the DIMACS CNF format, and down to th
   For checking the proofs, or viewing the proofs inside Isabelle, you additionally need:
 
   * Working installation of [Isabelle/HOL](https://isabelle.in.tum.de) with the [Archive of Formal Proofs](https://www.isa-afp.org) installed
-    as described [here](https://www.isa-afp.org/using.shtml). We require version = Isabelle-2023.
+    as described [here](https://www.isa-afp.org/using.shtml). We require version = Isabelle-2024.
 
 
 ## Building the tool

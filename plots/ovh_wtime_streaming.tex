@@ -10,6 +10,10 @@
 
 \begin{document}
 
+  \newcommand{\meanLISA}{10.6156}
+  \newcommand{\meanCAKE}{42.6218}
+
+
   \begin{tikzpicture}[thick,scale=1, every node/.style={scale=1}] %change the scales if you like to reduce the size
     \begin{axis}[
       legend style={font=\footnotesize, legend pos = north west},
@@ -25,6 +29,9 @@
 
       \addplot[mark=|,blue] table[x=num,y=ratio] {overhead_wtime_cake.data};
       \addlegendentry{Cadical | cake\_lpr};
+
+      \addplot[blue,dashed,thick] coordinates {(0,\meanCAKE) (200,\meanCAKE)};
+      \addplot[green,dashed,thick] coordinates {(0,\meanLISA) (200,\meanLISA)};
 
 %
 %       \addplot[mark=|,blue] table[x=val,y=num] {cdf_cake.data};
