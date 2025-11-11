@@ -236,7 +236,7 @@ subsubsection \<open>Empty, return, this\<close>
 
   subsubsection \<open>Bind\<close>          
   definition "g_bind m (\<lambda>x. f x) \<equiv> GR { (xs@ys,r) | xs ys r x. (xs,x) \<in> gM_rel m \<and> (ys,r) \<in> gM_rel (f x) }"
-  adhoc_overloading Monad_Syntax.bind g_bind
+  adhoc_overloading Monad_Syntax.bind == g_bind
   
   lemma igr_bind[igr_simps]: "(w,r)\<in>gM_rel (do {x\<leftarrow>m; f x}) \<longleftrightarrow> (\<exists>w\<^sub>1 x w\<^sub>2. (w\<^sub>1,x)\<in>gM_rel m \<and> (w\<^sub>2,r)\<in>gM_rel (f x) \<and> w=w\<^sub>1@w\<^sub>2 )"  
     unfolding g_bind_def

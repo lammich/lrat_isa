@@ -1,5 +1,7 @@
 .PHONY: code check_thys
 
+ISABELLE ?= "isabelle"
+
 htmlbase = https://lammich.github.io/lrat_isa/Unsorted/lrat_isa
 
 all: code test
@@ -18,4 +20,4 @@ test: code
 	@ echo "OK"
 
 check_thys:
-	isabelle build -D .
+	$(ISABELLE) build -D .
